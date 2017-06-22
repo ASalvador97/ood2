@@ -39,9 +39,9 @@ namespace FlowNetworkDesigner
         public virtual void  UpdatePipe() // TODO: needs values as parameters?
         {
             
-        } 
+        }
 
-        public virtual void AddPipe()
+        public virtual void AddPipe() { }
 
 
 

@@ -6,3 +6,12 @@ C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigne
 C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.pdb
 C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.exe
 C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.pdb
+C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.exe.config
+C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.exe
+C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.csprojResolveAssemblyReference.cache
+C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.Form1.resources
+C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.Properties.Resources.resources
+C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.csproj.GenerateResource.Cache
+C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.exe
+C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.pdb
+C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.pdb

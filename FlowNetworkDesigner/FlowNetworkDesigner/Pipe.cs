@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlowNetworkDesigner
 {
-    class Pipe:Component
+    class Pipe
     {
         private List<Point> points;
 

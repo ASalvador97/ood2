@@ -22,10 +22,11 @@ namespace FlowNetworkDesigner
 
         public bool AddComponent(Component component)
         {
-            switch (component.Equals(Component))
+            switch (component is Component)
             {
-                    case Pipe
+                    //case Pipe
             }
+            return false;
         }
     }
 }
