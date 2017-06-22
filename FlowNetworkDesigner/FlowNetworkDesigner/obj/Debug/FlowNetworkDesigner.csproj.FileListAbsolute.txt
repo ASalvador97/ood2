@@ -1,0 +1,8 @@
+C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.exe.config
+C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.csprojResolveAssemblyReference.cache
+C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.Properties.Resources.resources
+C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.csproj.GenerateResource.Cache
+C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.exe
+C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.pdb
+C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.exe
+C:\Users\Miniza\Desktop\OOD 2 Application\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.pdb
