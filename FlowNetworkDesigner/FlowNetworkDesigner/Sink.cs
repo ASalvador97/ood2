@@ -14,10 +14,10 @@ namespace FlowNetworkDesigner
 
 
         //constructor
-        public Sink(Point p) : base(p)
+        public Sink(Point p, object sender) : base(p, sender)
         {
             //TODO Initalize pipe
-            
+            pb.BackColor = Color.Blue;
         }
 
 

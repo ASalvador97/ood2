@@ -15,3 +15,12 @@ C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNet
 C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.exe
 C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.pdb
 C:\Users\Alex\Desktop\block 8\OOD 2 Application\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.pdb
+C:\Users\dioxe\Documents\OOD2 project\ood2\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.exe.config
+C:\Users\dioxe\Documents\OOD2 project\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.exe
+C:\Users\dioxe\Documents\OOD2 project\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.pdb
+C:\Users\dioxe\Documents\OOD2 project\ood2\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.exe
+C:\Users\dioxe\Documents\OOD2 project\ood2\FlowNetworkDesigner\FlowNetworkDesigner\bin\Debug\FlowNetworkDesigner.pdb
+C:\Users\dioxe\Documents\OOD2 project\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.csprojResolveAssemblyReference.cache
+C:\Users\dioxe\Documents\OOD2 project\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.Form1.resources
+C:\Users\dioxe\Documents\OOD2 project\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.Properties.Resources.resources
+C:\Users\dioxe\Documents\OOD2 project\ood2\FlowNetworkDesigner\FlowNetworkDesigner\obj\Debug\FlowNetworkDesigner.csproj.GenerateResource.Cache

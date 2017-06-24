@@ -11,24 +11,29 @@ namespace FlowNetworkDesigner
      {
          //variables
          private Pipe OuterPipe;
-         
+        private int CurrentFlow;
          
          
          //constructor       
-         public Pump(Point p)
-             :base(p)
+         public Pump(Point p, object sender,int currentflow)
+             :base(p,sender)
         {
-           // TODO initiate pipe?
-           //image
-
-            
+            // TODO initiate pipe?
+            //image
+            OuterPipe = null;
+            CurrentFlow = currentflow;
+            pb.BackColor = Color.Red;
         }
 
          //methods
-         public override void Draw()
+         public override void Draw(Point position, Form1 form)
          {
+
+            
+            base.Draw(position,form);
             
          }
+
 
          public override void UpdatePipe()
          {

@@ -19,14 +19,14 @@ namespace FlowNetworkDesigner
 
 
         //costructor
-        public Merger(Point p) : base(p)
+        public Merger(Point p, object sender) : base(p, sender)
         {
             // TODO Initiate Pipes
         }
 
 
         //methods
-        public override void Draw()
+        public override void Draw(Point position, Form1 form)
         {
             
         }

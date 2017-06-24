@@ -19,14 +19,14 @@ namespace FlowNetworkDesigner
 
 
         //constructor
-        public Splitter(Point p) 
-            :base(p) 
+        public Splitter(Point p, object sender) 
+            :base(p, sender) 
         {
             // TODO initate pipes?
         }
 
         //methods 
-        public override void Draw()
+        public override void Draw(Point position, Form1 form)
         {
            
         }

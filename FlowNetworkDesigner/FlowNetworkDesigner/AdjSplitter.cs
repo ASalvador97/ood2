@@ -18,14 +18,14 @@ namespace FlowNetworkDesigner
 
 
         //constructor
-        public AdjSplitter(Point p) : base(p)
+        public AdjSplitter(Point p, object sender) : base(p, sender)
         {
             //TODO initialize pipes
         }
 
 
         //methods 
-        public override void Draw()
+        public override void Draw(Point position, Form1 form)
         {
 
         }

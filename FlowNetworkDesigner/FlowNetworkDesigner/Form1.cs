@@ -12,46 +12,40 @@ namespace FlowNetworkDesigner
 {
     public partial class Form1 : Form
     {
-        PictureBox pb;
-        PictureBox margin;
+        object ButtonClicked;
+        Component component;
+        Network network;
+        int currentflow;
+
         public Form1()
         {
             InitializeComponent();
+            network = new Network();
         }
 
       
 
         private void button1_Click(object sender, EventArgs e)
         {
-              pb = new PictureBox();
-            margin = new PictureBox();
-            pb.Size = ((Button)sender).Size;
-            
-            var size = new Control().Size;
-            size.Height = pb.Size.Height * 3;
-            size.Width = pb.Size.Width * 3;
-            margin.Size = size;
-            
-            pb.BackColor = ((Button)sender).BackColor;
-            pb.Visible = true;
-            pb.Enabled = true;
+            currentflow = Convert.ToInt32(numericUpDown1.Value);
+             ButtonClicked = sender;
+            component = new Pump(new Point(0, 0), sender,currentflow);
 
         }
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
-            pb.Location = this.PointToClient(Cursor.Position);
-            margin.Location = pb.Location;
-            int lr ,tb;
-            lr = margin.Location.X- pb.Size.Width;
-            tb = margin.Location.Y- pb.Size.Width;
-            var position = new Point();
-            position.X = lr;
-            position.Y = tb;
-            margin.Location = position;
-            this.Controls.Add(pb);
-            this.Controls.Add(margin);
+            component.Position = Cursor.Position;
+            network.AddComponent(component,this);
+            ((Button)ButtonClicked).PerformClick();
+
             this.Refresh();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ButtonClicked = sender;
+            component = new Sink(new Point(0, 0), sender);
         }
     }
 }

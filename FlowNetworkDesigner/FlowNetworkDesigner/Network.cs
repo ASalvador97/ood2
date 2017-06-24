@@ -20,13 +20,32 @@ namespace FlowNetworkDesigner
         }
 
 
-        public bool AddComponent(Component component)
+        public void AddComponent(Component component, Form1 form)
         {
-            switch (component is Component)
+            if (CheckAddingComponents(component))
             {
-                    //case Pipe
+                component.Draw(component.Position, form);
+                                   
+                
+                Components.Add(component);
             }
-            return false;
+        }
+
+        public bool CheckAddingComponents(Component comp)
+        {
+            if (Components.Count > 0)
+            {
+                foreach (Component c in Components)
+                {
+                    if(comp.Position.X >=(c.Position.X-63)&& comp.Position.Y >= (c.Position.Y - 63)&& comp.Position.X <= (c.Position.X + 63) && comp.Position.Y <= (c.Position.Y + 63))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+
         }
     }
 }
