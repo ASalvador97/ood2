@@ -35,9 +35,10 @@ namespace FlowNetworkDesigner
 
         }
 
-        public override void UpdatePipe()
+        public override Pipe UpdatePipe(Pipe pipe)
         {
-           
+            return null;
+
         }
 
         public void SplitFlow()

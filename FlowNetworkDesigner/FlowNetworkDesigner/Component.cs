@@ -17,6 +17,9 @@ namespace FlowNetworkDesigner
         public PictureBox pb;
         private PictureBox margin;
         protected static int id;
+
+        public delegate Pipe UpdatePipeHandler(Pipe pipe);
+        public event UpdatePipeHandler UpdatePipeEvent;
         // TODO image placeholder?
         // TODO put pipes here
 
@@ -40,6 +43,9 @@ namespace FlowNetworkDesigner
             
             pb.Visible = true;
             pb.Enabled = true;
+
+            UpdatePipeEvent += new UpdatePipeHandler(UpdatePipe);
+            
         }
 
         
@@ -66,12 +72,13 @@ namespace FlowNetworkDesigner
 
 
 
-        public virtual void  UpdatePipe() // TODO: needs values as parameters?
-        {
-            
-        }
+        public virtual Pipe UpdatePipe(Pipe pipe) { return pipe; } // TODO: needs values as parameters?
+       
 
-        public abstract void AddPipe(Pipe pipe);
+        public virtual void AddPipe(Pipe pipe)
+        {
+            UpdatePipeEvent(pipe);
+        }
 
 
 

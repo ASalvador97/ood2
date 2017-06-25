@@ -11,20 +11,19 @@ namespace FlowNetworkDesigner
      {
          //variables
          private Pipe OuterPipe;
-        private int CurrentFlow;
-         
+         public double Flow { get; set; }
          
          //constructor       
-         public Pump(Point p, object sender,int currentflow)
+         public Pump(Point p, object sender,double currentFlow)
              :base(p,sender)
         {
             // TODO initiate pipe?
             //image
             id += 1;
             OuterPipe = null;
-            CurrentFlow = currentflow;
             pb.Name = "pipe" + id;
             pb.BackColor = Color.Red;
+            Flow = currentFlow;
         }
 
          //methods
@@ -38,12 +37,14 @@ namespace FlowNetworkDesigner
 
         public override void AddPipe(Pipe pipe)
         {
-            OuterPipe = pipe;
+            base.AddPipe(pipe);
         }
 
-         public override void UpdatePipe()
+         public override Pipe UpdatePipe(Pipe pipe)
          {
-             
+            pipe.Flow = this.Flow;
+            OuterPipe = pipe;
+            return pipe;
          }
      }
 }

@@ -9,10 +9,21 @@ namespace FlowNetworkDesigner
 {
    public class Pipe
     {
+        private double flow;
         public List<Point> Points { get; set; }
 
         //properties
-        public double Flow { get; set; }
+        public double Flow
+        {
+            get
+            {
+                return this.flow;
+            }
+            set
+            {
+                flow = value;
+            }
+        }
 
 
         //constructor

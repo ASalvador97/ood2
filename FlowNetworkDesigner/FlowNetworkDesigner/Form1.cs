@@ -15,7 +15,7 @@ namespace FlowNetworkDesigner
         object ButtonClicked;
         Component component;
         Network network;
-        int currentflow;
+        double currentflow;
         List<object> point;
         Pipe pipe;
         bool IsReadyToPaint;
@@ -34,7 +34,7 @@ namespace FlowNetworkDesigner
             currentflow = Convert.ToInt32(numericUpDown1.Value);
              ButtonClicked = sender;
             component = new Pump(new Point(0, 0), sender,currentflow);
-
+            
         }
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
@@ -125,6 +125,12 @@ namespace FlowNetworkDesigner
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             if(IsReadyToPaint) network.AddPipe(pipe, e,this);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //https://stackoverflow.com/questions/37908570/how-to-delete-a-drawn-line-on-a-form
+            //Just create a pen with the same color of the background and redraw it in the same points, remove it from list after
         }
     }
 }

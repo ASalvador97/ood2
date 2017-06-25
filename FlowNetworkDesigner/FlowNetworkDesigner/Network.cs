@@ -26,8 +26,9 @@ namespace FlowNetworkDesigner
         {
             if (CheckAddingComponents(component))
             {
+                
                 component.Draw(component.Position, form);
-                                   
+                               
                 
                 Components.Add(component);
             }
@@ -35,8 +36,9 @@ namespace FlowNetworkDesigner
 
         public void AddPipe(Pipe pipe, PaintEventArgs e, Form form)
         {
-            Pipes.Add(pipe);
             ConnectPipe(pipe, e, form);
+            Pipes.Add(pipe);
+            
         }
 
         private void ConnectPipe(Pipe pipe, PaintEventArgs e, Form form)
@@ -45,41 +47,53 @@ namespace FlowNetworkDesigner
             {
                 if(pipe.Points[0] == c.Position)
                 {
-                    if(c is Pump)
+                    if(!(c is Sink))
                     {
-                        ((Pump)c).AddPipe(pipe);
+                        c.AddPipe(pipe);
+                        pipe = c.UpdatePipe(pipe);
                     }
-                    else if(c is Merger)
-                    {
+                    
+                    //if(c is Pump)
+                    //{
+                        
+                    //    ((Pump)c).AddPipe(pipe);
+                    //    pipe = c.UpdatePipe(pipe);
+                    //}
+                    //else if(c is Merger)
+                    //{
 
-                    }
-                    else if(c is Splitter)
-                    {
+                    //}
+                    //else if(c is Splitter)
+                    //{
 
-                    }
-                    else if(c is AdjSplitter)
-                    {
+                    //}
+                    //else if(c is AdjSplitter)
+                    //{
 
-                    }
+                    //}
                 }
                 if(pipe.Points[pipe.Points.Count - 1] == c.Position)
                 {
-                    if (c is Sink)
+                    if(!(c is Pump))
                     {
-                        ((Sink)c).AddPipe(pipe);
+                        c.AddPipe(pipe);
                     }
-                    else if (c is Merger)
-                    {
+                    //if (c is Sink)
+                    //{
+                    //    ((Sink)c).AddPipe(pipe);
+                    //}
+                    //else if (c is Merger)
+                    //{
 
-                    }
-                    else if (c is Splitter)
-                    {
+                    //}
+                    //else if (c is Splitter)
+                    //{
 
-                    }
-                    else if (c is AdjSplitter)
-                    {
+                    //}
+                    //else if (c is AdjSplitter)
+                    //{
 
-                    }
+                    //}
                 }
             }
             // use the graphics class here to draw the pipes
@@ -98,8 +112,16 @@ namespace FlowNetworkDesigner
 
                     td = pipe.Points[pipe.Points.Count - 1].Y + (50 / 2);
                     Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-
                     g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
+
+                    Label label = new Label();
+                    label.Text = "Flow " + pipe.Flow;
+                    label.BackColor = Color.Transparent;
+                    int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
+                    int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
+                    
+                    label.Location = form.PointToClient(new Point(pipe.Points[0].X+x, pipe.Points[0].Y+y));
+                    form.Controls.Add(label);
                     break;
                 }
 
@@ -134,6 +156,7 @@ namespace FlowNetworkDesigner
             
         }
 
+        //Checks if the point you clicked is valid and not next to a component
         private bool CheckAddingComponents(Component comp)
         {
             if (Components.Count > 0)
