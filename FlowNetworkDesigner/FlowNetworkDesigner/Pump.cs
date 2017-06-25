@@ -20,8 +20,10 @@ namespace FlowNetworkDesigner
         {
             // TODO initiate pipe?
             //image
+            id += 1;
             OuterPipe = null;
             CurrentFlow = currentflow;
+            pb.Name = "pipe" + id;
             pb.BackColor = Color.Red;
         }
 
@@ -34,6 +36,10 @@ namespace FlowNetworkDesigner
             
          }
 
+        public override void AddPipe(Pipe pipe)
+        {
+            OuterPipe = pipe;
+        }
 
          public override void UpdatePipe()
          {

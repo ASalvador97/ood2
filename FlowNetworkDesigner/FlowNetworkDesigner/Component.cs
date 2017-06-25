@@ -14,14 +14,16 @@ namespace FlowNetworkDesigner
 
         //contains the position of the conponent on the canvas
         public Point Position { get; set; }
-        protected PictureBox pb;
+        public PictureBox pb;
         private PictureBox margin;
+        protected static int id;
         // TODO image placeholder?
         // TODO put pipes here
 
         //constructor
         public Component(Point p,object sender)
         {
+            
             Position = p;
             pb = new PictureBox();
             //margin = new PictureBox();
@@ -39,8 +41,10 @@ namespace FlowNetworkDesigner
             pb.Visible = true;
             pb.Enabled = true;
         }
+
         
-        
+
+
         //methods
         public virtual void Draw(Point position, Form1 form) // TODO: needs a point as a parameter?
         {
@@ -48,7 +52,7 @@ namespace FlowNetworkDesigner
 
             pb.Location = form.PointToClient(Cursor.Position);
             //margin.Location = pb.Location;
-            int lr, tb;
+            //int lr, tb;
             //lr = margin.Location.X - pb.Size.Width;
             //tb = margin.Location.Y - pb.Size.Width;
              position = new Point();
@@ -67,7 +71,7 @@ namespace FlowNetworkDesigner
             
         }
 
-        public virtual void AddPipe() { }
+        public abstract void AddPipe(Pipe pipe);
 
 
 

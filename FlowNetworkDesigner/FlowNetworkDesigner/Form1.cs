@@ -16,11 +16,15 @@ namespace FlowNetworkDesigner
         Component component;
         Network network;
         int currentflow;
+        List<object> point;
+        Pipe pipe;
+        bool IsReadyToPaint;
 
         public Form1()
         {
             InitializeComponent();
             network = new Network();
+            IsReadyToPaint = false;
         }
 
       
@@ -35,17 +39,92 @@ namespace FlowNetworkDesigner
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
-            component.Position = Cursor.Position;
-            network.AddComponent(component,this);
-            ((Button)ButtonClicked).PerformClick();
+            if (component != null)
+            {
+                component.Position = Cursor.Position;
+                component.pb.Click += Pb_Click;
+                network.AddComponent(component, this);
+                ((Button)ButtonClicked).PerformClick();
+                this.Refresh();
+            }
+            if (point != null)
+            {
+                if (point.Count > 0)
+                {
+                    //if (point[0] is Component)
+                    //{
 
-            this.Refresh();
+                    //    if (point[point.Count - 1] is Component)
+                    //    {
+                    //        pipe.Points = ConvertObjectToPoint();
+                    //        IsReadyToPaint = true;
+                    //        this.Refresh();
+                    //        IsReadyToPaint = false;
+                    //        //network.AddPipe(pipe, paint);
+
+                    //    }
+                    //    else
+                    //    {
+                            point.Add(Cursor.Position);
+
+                    //    }
+
+                    //}
+                }
+            }
+
+        }
+        private List<Point> ConvertObjectToPoint()
+        {
+            List<Point> positionPoint = new List<Point>();
+            foreach (object c in point)
+            {
+                if (c is Component)
+                {
+                    positionPoint.Add(((Component)c).Position);
+                }
+                else
+                {
+                    positionPoint.Add((Point)c);
+                }
+            }
+            return positionPoint;
+        }
+        private void Pb_Click(object sender, EventArgs e)
+        {
+            if (point != null)
+            {
+                if (point.Count == 0)
+                {
+                    point.Add(network.GetComponent(((PictureBox)sender).Name));
+                }
+                else if (point.Count > 0)
+                {
+                    point.Add(network.GetComponent(((PictureBox)sender).Name));
+                    pipe.Points = ConvertObjectToPoint();
+                    IsReadyToPaint = true;
+                    this.Refresh();
+                    IsReadyToPaint = false;
+                }
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             ButtonClicked = sender;
             component = new Sink(new Point(0, 0), sender);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            component = null;
+            point = new List<object>();
+            pipe = new Pipe();
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            if(IsReadyToPaint) network.AddPipe(pipe, e,this);
         }
     }
 }

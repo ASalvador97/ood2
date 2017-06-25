@@ -7,25 +7,26 @@ using System.Threading.Tasks;
 
 namespace FlowNetworkDesigner
 {
-    class Pipe
+   public class Pipe
     {
-        private List<Point> points;
+        public List<Point> Points { get; set; }
 
         //properties
         public double Flow { get; set; }
 
 
         //constructor
-        public Pipe(double F, List<Point> p) //needs a list of points as a parameter? 
+        public Pipe() //needs a list of points as a parameter? 
         {
-            points = p;
-            Flow = F;
+            Points = new List<Point>();
+            Flow = 0;
         }
  
         //methods
         public void AddPoint(Point p)
         {
-            points.Add(p);
+            Points.Add(p);
         }
+        
     }
 }

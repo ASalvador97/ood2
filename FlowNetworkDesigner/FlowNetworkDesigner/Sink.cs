@@ -10,7 +10,7 @@ namespace FlowNetworkDesigner
     class Sink:Component
     {
         //variables
-        private Pipe OuterPipe;
+        private Pipe InnerPipe;
 
 
         //constructor
@@ -20,7 +20,10 @@ namespace FlowNetworkDesigner
             pb.BackColor = Color.Blue;
         }
 
-
+        public override void AddPipe(Pipe pipe)
+        {
+            InnerPipe = pipe;
+        }
         //how do we change the pipe from null to something
     }
 }

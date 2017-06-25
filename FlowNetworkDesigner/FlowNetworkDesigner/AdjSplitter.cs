@@ -34,7 +34,10 @@ namespace FlowNetworkDesigner
         {
 
         }
+        public override void AddPipe(Pipe pipe)
+        {
 
+        }
         public void SplitFlow(double flowsplit)
         {
             double inflow = InnerPipe.Flow;

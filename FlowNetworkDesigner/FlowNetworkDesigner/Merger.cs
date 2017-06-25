@@ -31,6 +31,10 @@ namespace FlowNetworkDesigner
             
         }
 
+        public override void AddPipe(Pipe pipe)
+        {
+
+        }
         public override void UpdatePipe()
         {
             
