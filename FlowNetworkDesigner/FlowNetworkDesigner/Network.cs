@@ -117,6 +117,8 @@ namespace FlowNetworkDesigner
                 ((Label)c).Text="Flow "+GetComponent(((Label)c).Name).Flow;
             }
         }
+       
+
         public void DrawOnForm(Pipe pipe, PaintEventArgs e, Form form)
         {
             // use the graphics class here to draw the pipes

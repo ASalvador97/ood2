@@ -28,7 +28,7 @@ namespace FlowNetworkDesigner
             LowerOutPipe = null;
             InnerPipe = null;
             id += 1;
-            pb.Name = "merger" + id;
+            pb.Name = "splitter" + id;
             pb.BackColor = Color.Olive;
         }
 

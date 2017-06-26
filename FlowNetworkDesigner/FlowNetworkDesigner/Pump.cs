@@ -21,7 +21,7 @@ namespace FlowNetworkDesigner
             //image
             id += 1;
             OuterPipe = null;
-            pb.Name = "pipe" + id;
+            pb.Name = "pump" + id;
             pb.BackColor = Color.Red;
             Flow = currentFlow;
         }
@@ -44,7 +44,7 @@ namespace FlowNetworkDesigner
          {
             pipe.Flow = this.Flow;
             OuterPipe = pipe;
-            return pipe;
+            return OuterPipe;
          }
      }
 }

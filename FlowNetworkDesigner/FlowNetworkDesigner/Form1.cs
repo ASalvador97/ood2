@@ -127,14 +127,15 @@ namespace FlowNetworkDesigner
 
             if (IsReadyToPaint)
             {
-                if (network.Pipes.Count > 0)
+                
+                network.AddPipe(pipe, e, this);
+                if (network.Pipes.Count > 1)
                 {
                     foreach (Pipe c in network.Pipes)
                     {
-                        network.DrawOnForm(c, e, this);
+                        network.DrawOnForm(c,e, this);
                     }
                 }
-                network.AddPipe(pipe, e, this);
                 IsReadyToPaint = false;
             }
         }

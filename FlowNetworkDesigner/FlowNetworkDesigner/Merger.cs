@@ -79,7 +79,7 @@ namespace FlowNetworkDesigner
 
         }
 
-        public bool IsUpperInPipeNull()
+        private bool IsUpperInPipeNull()
         {
             if (UpperInPipe == null)
             {
