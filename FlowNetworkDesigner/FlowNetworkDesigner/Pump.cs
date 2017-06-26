@@ -11,7 +11,6 @@ namespace FlowNetworkDesigner
      {
          //variables
          private Pipe OuterPipe;
-         public double Flow { get; set; }
          
          //constructor       
          public Pump(Point p, object sender,double currentFlow)
@@ -35,9 +34,9 @@ namespace FlowNetworkDesigner
             
          }
 
-        public override void AddPipe(Pipe pipe)
+        public override void AddOuterPipe(Pipe pipe)
         {
-            base.AddPipe(pipe);
+            base.AddOuterPipe(pipe);
         }
 
          public override Pipe UpdatePipe(Pipe pipe)

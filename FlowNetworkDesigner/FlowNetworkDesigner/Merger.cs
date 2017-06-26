@@ -22,16 +22,24 @@ namespace FlowNetworkDesigner
         public Merger(Point p, object sender) : base(p, sender)
         {
             // TODO Initiate Pipes
+            UpperInPipe = null;
+            LowerInPipe = null;
+            OuterPipe = null;
+            id += 1;
+            OuterPipe = null;
+            pb.Name = "merger" + id;
+            pb.BackColor = Color.Orange;
         }
 
 
         //methods
         public override void Draw(Point position, Form1 form)
         {
-            
+
+            base.Draw(position, form);
         }
 
-        public override void AddPipe(Pipe pipe)
+        public override void AddInnerPipe(Pipe pipe)
         {
 
         }
@@ -40,5 +48,18 @@ namespace FlowNetworkDesigner
             return null;
 
         }
+
+        public bool IsUpperInPipeNull()
+        {
+            if (UpperInPipe == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

@@ -132,5 +132,23 @@ namespace FlowNetworkDesigner
             //https://stackoverflow.com/questions/37908570/how-to-delete-a-drawn-line-on-a-form
             //Just create a pen with the same color of the background and redraw it in the same points, remove it from list after
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ButtonClicked = sender;
+            component = new Merger(new Point(0, 0), sender);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ButtonClicked = sender;
+            component = new Splitter(new Point(0, 0), sender);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            ButtonClicked = sender;
+            component = new AdjSplitter(new Point(0, 0), sender);
+        }
     }
 }

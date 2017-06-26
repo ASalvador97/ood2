@@ -12,15 +12,16 @@ namespace FlowNetworkDesigner
         //variables
         private Pipe InnerPipe;
 
-
         //constructor
         public Sink(Point p, object sender) : base(p, sender)
         {
             //TODO Initalize pipe
+            id += 1;
+            pb.Name = "sink" + id;
             pb.BackColor = Color.Blue;
         }
 
-        public override void AddPipe(Pipe pipe)
+        public override void AddInnerPipe(Pipe pipe)
         {
             InnerPipe = pipe;
         }

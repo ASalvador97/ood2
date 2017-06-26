@@ -7,20 +7,22 @@ using System.Drawing;
 
 namespace FlowNetworkDesigner
 {
-    class AdjSplitter : Component
+    class AdjSplitter : Splitter
     {
         //variables 
-        private Pipe UpperOutPipe;
-
-        private Pipe LowerOutPipe;
-
-        private Pipe InnerPipe;
+        
 
 
         //constructor
         public AdjSplitter(Point p, object sender) : base(p, sender)
         {
             //TODO initialize pipes
+            UpperOutPipe = null;
+            LowerOutPipe = null;
+            InnerPipe = null;
+            id += 1;
+            pb.Name = "merger" + id;
+            pb.BackColor = Color.DarkOliveGreen;
         }
 
 
@@ -28,6 +30,7 @@ namespace FlowNetworkDesigner
         public override void Draw(Point position, Form1 form)
         {
 
+            base.Draw(position, form);
         }
 
         public override Pipe UpdatePipe(Pipe pipe)
@@ -35,10 +38,15 @@ namespace FlowNetworkDesigner
             return null;
 
         }
-        public override void AddPipe(Pipe pipe)
+        public override void AddInnerPipe(Pipe pipe)
         {
 
         }
+        public override void AddOuterPipe(Pipe pipe)
+        {
+
+        }
+
         public void SplitFlow(double flowsplit)
         {
             double inflow = InnerPipe.Flow;

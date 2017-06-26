@@ -11,6 +11,7 @@ namespace FlowNetworkDesigner
     public abstract class  Component
     {
         //properties
+        public double Flow { get; set; }
 
         //contains the position of the conponent on the canvas
         public Point Position { get; set; }
@@ -75,11 +76,15 @@ namespace FlowNetworkDesigner
         public virtual Pipe UpdatePipe(Pipe pipe) { return pipe; } // TODO: needs values as parameters?
        
 
-        public virtual void AddPipe(Pipe pipe)
+        public virtual void AddInnerPipe(Pipe pipe)
         {
             UpdatePipeEvent(pipe);
         }
 
+        public virtual void AddOuterPipe(Pipe pipe)
+        {
+            UpdatePipeEvent(pipe);
+        }
 
 
     }

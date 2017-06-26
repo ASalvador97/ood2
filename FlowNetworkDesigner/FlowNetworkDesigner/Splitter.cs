@@ -11,11 +11,11 @@ namespace FlowNetworkDesigner
     class Splitter :Component
     {
         //variables        
-        private Pipe UpperOutPipe;
+        protected Pipe UpperOutPipe;
 
-        private Pipe LowerOutPipe;
+        protected Pipe LowerOutPipe;
 
-        private Pipe InnerPipe;
+        protected Pipe InnerPipe;
 
 
         //constructor
@@ -23,29 +23,62 @@ namespace FlowNetworkDesigner
             :base(p, sender) 
         {
             // TODO initate pipes?
+            UpperOutPipe = null;
+            LowerOutPipe = null;
+            InnerPipe = null;
+            id += 1;
+            pb.Name = "merger" + id;
+            pb.BackColor = Color.Olive;
         }
 
         //methods 
         public override void Draw(Point position, Form1 form)
         {
-           
-        }
-        public override void AddPipe(Pipe pipe)
-        {
 
+            base.Draw(position, form);
+        }
+        public override void AddInnerPipe(Pipe pipe)
+        {
+            InnerPipe = pipe;
+            base.AddInnerPipe(pipe);
+        }
+        public override void AddOuterPipe(Pipe pipe)
+        {
+            if(UpperOutPipe == null)
+            {
+                UpperOutPipe = pipe;
+            }
+            else
+            {
+                LowerOutPipe = pipe;
+            }
+            base.AddOuterPipe(pipe);
         }
 
         public override Pipe UpdatePipe(Pipe pipe)
         {
+            if (UpperOutPipe != null)
+            {
+                UpperOutPipe.Flow = pipe.Flow / 2;
+            }
+            if(LowerOutPipe != null)
+            {
+              LowerOutPipe.Flow = pipe.Flow / 2;
+            }
             return null;
 
         }
 
-        public void SplitFlow()
+        public bool IsUpperOutPipeNull()
         {
-            double inflow = InnerPipe.Flow;
-            UpperOutPipe.Flow = inflow / 2;
-            LowerOutPipe.Flow = inflow / 2;
+            if (UpperOutPipe == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
