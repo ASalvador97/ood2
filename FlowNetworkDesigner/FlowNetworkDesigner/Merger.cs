@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace FlowNetworkDesigner
 {
@@ -39,19 +40,60 @@ namespace FlowNetworkDesigner
             base.Draw(position, form);
         }
 
-        public override void AddInnerPipe(Pipe pipe)
+        public override void AddInnerPipe(Pipe pipe,Form form)
         {
-
+            if (IsUpperInPipeNull())
+            {
+                UpperInPipe = pipe;
+            }
+            else
+            {
+                LowerInPipe = pipe;
+            }
         }
-        public override Pipe UpdatePipe(Pipe pipe)
+
+        public override void AddOuterPipe(Pipe pipe, Form form)
         {
-            return null;
+            base.AddOuterPipe(pipe,form);
+        }
+
+        public override Pipe UpdatePipe(Pipe pipe, Form form)
+        {
+            OuterPipe = pipe;
+            if (!IsUpperInPipeNull())
+            {
+                if (LowerInPipe != null)
+                {
+                    OuterPipe.Flow = UpperInPipe.Flow + LowerInPipe.Flow;
+                }
+                else
+                {
+                    OuterPipe.Flow = UpperInPipe.Flow;
+                }
+            }
+            else
+            {
+                OuterPipe.Flow = 0;
+            }
+            return OuterPipe;
 
         }
 
         public bool IsUpperInPipeNull()
         {
             if (UpperInPipe == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsLowerInPipeNull()
+        {
+            if (LowerInPipe == null)
             {
                 return true;
             }

@@ -10,9 +10,9 @@ namespace FlowNetworkDesigner
 {
     class Network
     {
-        private List<Component> Components;
+        public List<Component> Components { get; set; }
 
-        private List<Pipe> Pipes;
+        public List<Pipe> Pipes { get; set; }
 
         private Component[] TempComponents;
 
@@ -51,9 +51,10 @@ namespace FlowNetworkDesigner
                 {
                     if(!(c is Sink))
                     {
+                        c.AddOuterPipe(pipe,form);
+                        pipe = c.UpdatePipe(pipe,form);
+
                         TempComponents[0] = c;
-                        c.AddOuterPipe(pipe);
-                        pipe = c.UpdatePipe(pipe);
                     }
                     
                     //if(c is Pump)
@@ -75,48 +76,61 @@ namespace FlowNetworkDesigner
 
                     //}
                 }
-                if(pipe.Points[pipe.Points.Count - 1] == c.Position)
+                if (pipe.Points.Count > 0)
                 {
-                    if(c is Splitter)
+                    if (pipe.Points[pipe.Points.Count - 1] == c.Position)
                     {
-                        TempComponents[1] = c;
+                        if (c is Splitter)
+                        {
+                            TempComponents[1] = c;
+                        }
+                        else if (!(c is Pump))
+                        {
+                            c.AddInnerPipe(pipe,form);
+                            TempComponents[1] = c;
+                        }
+
+                        //if (c is Sink)
+                        //{
+                        //    ((Sink)c).AddPipe(pipe);
+                        //}
+                        //else if (c is Merger)
+                        //{
+
+                        //}
+                        //else if (c is Splitter)
+                        //{
+
+                        //}
+                        //else if (c is AdjSplitter)
+                        //{
+
+                        //}
                     }
-                    else if(!(c is Pump))
-                    {
-                        c.AddInnerPipe(pipe);
-                        TempComponents[1] = c;
-                    }
-                   
-                    //if (c is Sink)
-                    //{
-                    //    ((Sink)c).AddPipe(pipe);
-                    //}
-                    //else if (c is Merger)
-                    //{
-
-                    //}
-                    //else if (c is Splitter)
-                    //{
-
-                    //}
-                    //else if (c is AdjSplitter)
-                    //{
-
-                    //}
                 }
             }
+
+            this.DrawOnForm(pipe, e, form);
+            foreach (object c in form.Controls)
+            {
+                if(c is Label)
+                ((Label)c).Text="Flow "+GetComponent(((Label)c).Name).Flow;
+            }
+        }
+        public void DrawOnForm(Pipe pipe, PaintEventArgs e, Form form)
+        {
             // use the graphics class here to draw the pipes
             Graphics g = e.Graphics;
             Pen p = new Pen(Brushes.Green, 3);
-            for (int i = 0; i<pipe.Points.Count; i++)
+            for (int i = 0; i < pipe.Points.Count; i++)
             {
                 //this part is if the user clicked on the components only
-                if(pipe.Points.Count == 2)
+                if (pipe.Points.Count == 2)
                 {
                     if (TempComponents[0] is Splitter || TempComponents[0] is AdjSplitter)
                     {
                         if (((Splitter)TempComponents[0]).IsUpperOutPipeNull())
-                        { 
+                        {
                             //this is to align the first pipeline at the top of the picture box
                             int lr, td;
                             lr = pipe.Points[0].X + 45;
@@ -126,7 +140,7 @@ namespace FlowNetworkDesigner
 
                             if (TempComponents[1] is Merger)
                             {
-                                if (((Merger)TempComponents[1]).IsUpperInPipeNull())
+                                if (((Merger)TempComponents[1]).IsLowerInPipeNull())
                                 {
                                     //this is for the positioning of the pipeline to the middle of the last component
                                     td = pipe.Points[pipe.Points.Count - 1].Y + 5;
@@ -135,6 +149,7 @@ namespace FlowNetworkDesigner
                                     g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
 
                                     Label label = new Label();
+                                    label.Name = TempComponents[0].pb.Name;
                                     label.Text = "Flow " + pipe.Flow;
                                     label.BackColor = Color.Transparent;
                                     int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
@@ -154,6 +169,7 @@ namespace FlowNetworkDesigner
 
                                     Label label = new Label();
                                     label.Text = "Flow " + pipe.Flow;
+                                    label.Name = TempComponents[0].pb.Name;
                                     label.BackColor = Color.Transparent;
                                     int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                                     int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -173,6 +189,7 @@ namespace FlowNetworkDesigner
 
                                 Label label = new Label();
                                 label.Text = "Flow " + pipe.Flow;
+                                label.Name = TempComponents[0].pb.Name;
                                 label.BackColor = Color.Transparent;
                                 int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                                 int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -182,18 +199,18 @@ namespace FlowNetworkDesigner
                                 break;
                             }
                         }
-                        else
+                        else if(!(TempComponents[0] is Sink))
                         {
                             //this is to align the second pipeline to the buttom of the picture box
                             int lr, td;
                             lr = pipe.Points[0].X + 45;
-                            td = pipe.Points[0].Y + (TempComponents[0].pb.Size.Height-5);
+                            td = pipe.Points[0].Y + (TempComponents[0].pb.Size.Height - 5);
                             Point pos = new Point(lr, td);
                             // end of alignment
 
                             if (TempComponents[1] is Merger)
                             {
-                                if (((Merger)TempComponents[1]).IsUpperInPipeNull())
+                                if (((Merger)TempComponents[1]).IsLowerInPipeNull())
                                 {
                                     //this is for the positioning of the pipeline to the middle of the last component
                                     td = pipe.Points[pipe.Points.Count - 1].Y + 5;
@@ -203,6 +220,7 @@ namespace FlowNetworkDesigner
 
                                     Label label = new Label();
                                     label.Text = "Flow " + pipe.Flow;
+                                    label.Name = TempComponents[0].pb.Name;
                                     label.BackColor = Color.Transparent;
                                     int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                                     int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -221,6 +239,7 @@ namespace FlowNetworkDesigner
 
                                     Label label = new Label();
                                     label.Text = "Flow " + pipe.Flow;
+                                    label.Name = TempComponents[0].pb.Name;
                                     label.BackColor = Color.Transparent;
                                     int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                                     int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -240,6 +259,7 @@ namespace FlowNetworkDesigner
 
                                 Label label = new Label();
                                 label.Text = "Flow " + pipe.Flow;
+                                label.Name = TempComponents[0].pb.Name;
                                 label.BackColor = Color.Transparent;
                                 int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                                 int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -250,8 +270,8 @@ namespace FlowNetworkDesigner
                             }
                         }
                     }
-                    else if(!(TempComponents[0] is Sink))
-                    { 
+                    else if (!(TempComponents[0] is Sink))
+                    {
                         //this is to align the line in the middle of the picture box
                         int lr, td;
                         lr = pipe.Points[0].X + 45;
@@ -263,7 +283,7 @@ namespace FlowNetworkDesigner
                         //Akinan pone if statement pa e lastu component den e list di tempcomponent (dus pa check e merger)
                         if (TempComponents[1] is Merger)
                         {
-                            if (((Merger)TempComponents[1]).IsUpperInPipeNull())
+                            if (((Merger)TempComponents[1]).IsLowerInPipeNull())
                             {
                                 //this is for the positioning of the pipeline to the middle of the last component
                                 td = pipe.Points[pipe.Points.Count - 1].Y + 5;
@@ -273,6 +293,7 @@ namespace FlowNetworkDesigner
 
                                 Label label = new Label();
                                 label.Text = "Flow " + pipe.Flow;
+                                label.Name = TempComponents[0].pb.Name;
                                 label.BackColor = Color.Transparent;
                                 int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                                 int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -284,13 +305,14 @@ namespace FlowNetworkDesigner
                             else
                             {
                                 //this is for the positioning of the pipeline to the middle of the last component
-                                td = pipe.Points[pipe.Points.Count - 1].Y + (TempComponents[1].pb.Size.Height-5);
+                                td = pipe.Points[pipe.Points.Count - 1].Y + (TempComponents[1].pb.Size.Height - 5);
                                 Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
                                 //end of alignment
                                 g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
 
                                 Label label = new Label();
                                 label.Text = "Flow " + pipe.Flow;
+                                label.Name = TempComponents[0].pb.Name;
                                 label.BackColor = Color.Transparent;
                                 int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                                 int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -310,6 +332,7 @@ namespace FlowNetworkDesigner
 
                             Label label = new Label();
                             label.Text = "Flow " + pipe.Flow;
+                            label.Name = TempComponents[0].pb.Name;
                             label.BackColor = Color.Transparent;
                             int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                             int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -321,7 +344,7 @@ namespace FlowNetworkDesigner
                     }
                 }
                 //end of Checking for only clicking on the components in the form
-               
+
                 //this part is if the user clicked on multiple areas in the form
                 if (i == 0)
                 {
@@ -335,7 +358,7 @@ namespace FlowNetworkDesigner
                             td = pipe.Points[0].Y + 5;
                             Point pos = new Point(lr, td);
                             // end of alignment
-                            g.DrawLine(p, form.PointToClient(pos), form.PointToClient(pipe.Points[i+1]));
+                            g.DrawLine(p, form.PointToClient(pos), form.PointToClient(pipe.Points[i + 1]));
                         }
                         else
                         {
@@ -345,7 +368,7 @@ namespace FlowNetworkDesigner
                             td = pipe.Points[0].Y + (TempComponents[0].pb.Size.Height - 5);
                             Point pos = new Point(lr, td);
                             // end of alignment
-                            g.DrawLine(p, form.PointToClient(pos), form.PointToClient(pipe.Points[i+1]));
+                            g.DrawLine(p, form.PointToClient(pos), form.PointToClient(pipe.Points[i + 1]));
                         }
                     }
                     else if (!(TempComponents[0] is Sink))
@@ -356,11 +379,11 @@ namespace FlowNetworkDesigner
                         td = pipe.Points[0].Y + (50 / 2);
                         Point pos = new Point(lr, td);
                         // end of alignment
-                        g.DrawLine(p, form.PointToClient(pos), form.PointToClient(pipe.Points[i+1]));
+                        g.DrawLine(p, form.PointToClient(pos), form.PointToClient(pipe.Points[i + 1]));
                     }
-                    
+
                 }
-                else if(i < pipe.Points.Count-2)
+                else if (i < pipe.Points.Count - 2)
                 {
                     g.DrawLine(p, form.PointToClient(pipe.Points[i]), form.PointToClient(pipe.Points[i + 1]));
                 }
@@ -368,7 +391,7 @@ namespace FlowNetworkDesigner
                 {
                     if (TempComponents[1] is Merger)
                     {
-                        if (((Merger)TempComponents[1]).IsUpperInPipeNull())
+                        if (((Merger)TempComponents[1]).IsLowerInPipeNull())
                         {
                             //this is for the positioning of the pipeline to the middle of the last component
                             int td = pipe.Points[pipe.Points.Count - 1].Y + 5;
@@ -378,6 +401,7 @@ namespace FlowNetworkDesigner
 
                             Label label = new Label();
                             label.Text = "Flow " + pipe.Flow;
+                            label.Name = TempComponents[0].pb.Name;
                             label.BackColor = Color.Transparent;
                             int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                             int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -396,6 +420,7 @@ namespace FlowNetworkDesigner
 
                             Label label = new Label();
                             label.Text = "Flow " + pipe.Flow;
+                            label.Name = TempComponents[0].pb.Name;
                             label.BackColor = Color.Transparent;
                             int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                             int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -415,6 +440,7 @@ namespace FlowNetworkDesigner
 
                         Label label = new Label();
                         label.Text = "Flow " + pipe.Flow;
+                        label.Name = TempComponents[0].pb.Name;
                         label.BackColor = Color.Transparent;
                         int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
                         int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
@@ -423,13 +449,12 @@ namespace FlowNetworkDesigner
                         form.Controls.Add(label);
                         break;
                     }
-                    
+
                 }
                 //end if the user clicked on multiple areas in the form
             }
-
-
         }
+        
 
         //Checks if the point you clicked is valid and not next to a component
         private bool CheckAddingComponents(Component comp)

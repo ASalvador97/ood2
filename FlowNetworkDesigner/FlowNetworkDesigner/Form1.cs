@@ -45,7 +45,6 @@ namespace FlowNetworkDesigner
                 component.pb.Click += Pb_Click;
                 network.AddComponent(component, this);
                 ((Button)ButtonClicked).PerformClick();
-                this.Refresh();
             }
             if (point != null)
             {
@@ -105,6 +104,7 @@ namespace FlowNetworkDesigner
                     IsReadyToPaint = true;
                     this.Refresh();
                     IsReadyToPaint = false;
+                    button6.PerformClick();
                 }
             }
         }
@@ -124,7 +124,19 @@ namespace FlowNetworkDesigner
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            if(IsReadyToPaint) network.AddPipe(pipe, e,this);
+
+            if (IsReadyToPaint)
+            {
+                if (network.Pipes.Count > 0)
+                {
+                    foreach (Pipe c in network.Pipes)
+                    {
+                        network.DrawOnForm(c, e, this);
+                    }
+                }
+                network.AddPipe(pipe, e, this);
+                IsReadyToPaint = false;
+            }
         }
 
         private void button7_Click(object sender, EventArgs e)

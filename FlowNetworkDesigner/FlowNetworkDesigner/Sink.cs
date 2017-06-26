@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace FlowNetworkDesigner
 {
@@ -21,7 +22,7 @@ namespace FlowNetworkDesigner
             pb.BackColor = Color.Blue;
         }
 
-        public override void AddInnerPipe(Pipe pipe)
+        public override void AddInnerPipe(Pipe pipe, Form form)
         {
             InnerPipe = pipe;
         }

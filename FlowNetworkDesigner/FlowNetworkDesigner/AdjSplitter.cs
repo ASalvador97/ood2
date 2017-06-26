@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace FlowNetworkDesigner
 {
@@ -33,16 +34,16 @@ namespace FlowNetworkDesigner
             base.Draw(position, form);
         }
 
-        public override Pipe UpdatePipe(Pipe pipe)
+        public override Pipe UpdatePipe(Pipe pipe, Form form)
         {
             return null;
 
         }
-        public override void AddInnerPipe(Pipe pipe)
+        public override void AddInnerPipe(Pipe pipe, Form form)
         {
 
         }
-        public override void AddOuterPipe(Pipe pipe)
+        public override void AddOuterPipe(Pipe pipe, Form form)
         {
 
         }

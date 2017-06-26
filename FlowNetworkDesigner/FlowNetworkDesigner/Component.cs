@@ -19,7 +19,7 @@ namespace FlowNetworkDesigner
         private PictureBox margin;
         protected static int id;
 
-        public delegate Pipe UpdatePipeHandler(Pipe pipe);
+        public delegate Pipe UpdatePipeHandler(Pipe pipe,Form form);
         public event UpdatePipeHandler UpdatePipeEvent;
         // TODO image placeholder?
         // TODO put pipes here
@@ -73,17 +73,17 @@ namespace FlowNetworkDesigner
 
 
 
-        public virtual Pipe UpdatePipe(Pipe pipe) { return pipe; } // TODO: needs values as parameters?
+        public virtual Pipe UpdatePipe(Pipe pipe,Form form) { return pipe; } // TODO: needs values as parameters?
        
 
-        public virtual void AddInnerPipe(Pipe pipe)
+        public virtual void AddInnerPipe(Pipe pipe,Form form)
         {
-            UpdatePipeEvent(pipe);
+            UpdatePipeEvent(pipe,form);
         }
 
-        public virtual void AddOuterPipe(Pipe pipe)
+        public virtual void AddOuterPipe(Pipe pipe,Form form)
         {
-            UpdatePipeEvent(pipe);
+            UpdatePipeEvent(pipe,form);
         }
 
 
