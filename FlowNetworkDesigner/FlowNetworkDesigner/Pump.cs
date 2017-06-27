@@ -10,41 +10,35 @@ namespace FlowNetworkDesigner
 {
      public class Pump:Component
      {
-         //variables
-         private Pipe OuterPipe;
+        //variables
+         public double Flow { get; set; }
+         //private Pipe OuterPipe;
          
          //constructor       
-         public Pump(Point p, object sender,double currentFlow)
-             :base(p,sender)
+         public Pump(Point p, string name,double currentFlow)
+             :base(p,name)
         {
             // TODO initiate pipe?
             //image
-            id += 1;
-            OuterPipe = null;
-            pb.Name = "pump" + id;
-            pb.BackColor = Color.Red;
+            
+            Image = Properties.Resources.Pump;
+            //id += 1;
+            //OuterPipe = null;
+            //pb.Name = "pump" + id;
+            //pb.BackColor = Color.Red;
             Flow = currentFlow;
         }
 
          //methods
-         public override void Draw(Point position, Form1 form)
+         public override void Draw(Graphics graphic)
          {
+            Size size = new Size(Image.Width, Image.Height);
+            Rectangle rectangle = new Rectangle(Location, size);
+            graphic.DrawImage(Image, rectangle);
 
-            
-            base.Draw(position,form);
-            
-         }
+            graphic.DrawString("Capacity " + Flow.ToString(), new Font("Arial", 8, FontStyle.Regular), Brushes.Black, Location.X - 6, Location.Y - 20);
 
-        public override void AddOuterPipe(Pipe pipe, Form form)
-        {
-            base.AddOuterPipe(pipe, form);
         }
-
-         public override Pipe UpdatePipe(Pipe pipe, Form form)
-         {
-            pipe.Flow = this.Flow;
-            OuterPipe = pipe;
-            return OuterPipe;
-         }
+        
      }
 }

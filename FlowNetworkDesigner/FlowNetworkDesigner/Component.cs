@@ -10,81 +10,111 @@ namespace FlowNetworkDesigner
 {
     public abstract class  Component
     {
-        //properties
-        public double Flow { get; set; }
+        public Point Location { get; set; }
+        public Image Image { get; set; }
+        public string Name { get; set; }
 
-        //contains the position of the conponent on the canvas
-        public Point Position { get; set; }
-        public PictureBox pb;
-        private PictureBox margin;
-        protected static int id;
-
-        public delegate Pipe UpdatePipeHandler(Pipe pipe,Form form);
-        public event UpdatePipeHandler UpdatePipeEvent;
-        // TODO image placeholder?
-        // TODO put pipes here
-
-        //constructor
-        public Component(Point p,object sender)
+        public Component(Point location, string name) 
         {
-            
-            Position = p;
-            pb = new PictureBox();
-            //margin = new PictureBox();
-            pb.Size = ((Button)sender).Size;
-
-            var size = new Control().Size;
-            size.Height = pb.Size.Height * 3;
-            size.Width = pb.Size.Width * 3;
-            //margin.Size = size;
-
-            pb.BackColor = ((Button)sender).BackColor;
-            //margin.SendToBack();
-            //margin.BackColor = Color.Transparent;
-            
-            pb.Visible = true;
-            pb.Enabled = true;
-
-            UpdatePipeEvent += new UpdatePipeHandler(UpdatePipe);
-            
+            Location = location;
+            Name = name;
         }
-
-        
-
-
-        //methods
-        public virtual void Draw(Point position, Form1 form) // TODO: needs a point as a parameter?
+        public bool Contains(Point p) // for public Element CheckElement(Point p) in class PipelineNetwork
         {
-          
-
-            pb.Location = form.PointToClient(Cursor.Position);
-            //margin.Location = pb.Location;
-            //int lr, tb;
-            //lr = margin.Location.X - pb.Size.Width;
-            //tb = margin.Location.Y - pb.Size.Width;
-             position = new Point();
-            //position.X = lr;
-            //position.Y = tb;
-            //margin.Location = position;
-            form.Controls.Add(pb);
-            //form.Controls.Add(margin);
+            if (p == Location || ((p.X > Location.X && p.X < Location.X + 40) && (p.Y > Location.Y && p.Y < Location.Y + 40)))
+            {
+                return true;
+            }
+            return false;
         }
 
 
+        public virtual void Draw(Graphics graphic) { }
 
-
-        public virtual Pipe UpdatePipe(Pipe pipe,Form form) { return pipe; } // TODO: needs values as parameters?
-       
-
-        public virtual void AddInnerPipe(Pipe pipe,Form form)
+        public bool ContainsTogether(Point p) // only for adding elements (checking if this place has element or not)
         {
-            UpdatePipeEvent(pipe,form);
+            if (p == Location || ((p.X + 30 > Location.X && p.X < Location.X + 40) && (p.Y + 30 > Location.Y && p.Y < Location.Y + 40)))
+            {
+                return true;
+            }
+            return false;
         }
 
-        public virtual void AddOuterPipe(Pipe pipe,Form form)
-        {
-            UpdatePipeEvent(pipe,form);
-        }
+        ////properties
+        //public double Flow { get; set; }
+
+        ////contains the position of the conponent on the canvas
+        //public Point Position { get; set; }
+        //public PictureBox pb;
+        //private PictureBox margin;
+        //protected static int id;
+
+        //public delegate Pipe UpdatePipeHandler(Pipe pipe,Form form);
+        //public event UpdatePipeHandler UpdatePipeEvent;
+        //// TODO image placeholder?
+        //// TODO put pipes here
+
+        ////constructor
+        //public Component(Point p,object sender)
+        //{
+
+        //    Position = p;
+        //    pb = new PictureBox();
+        //    //margin = new PictureBox();
+        //    pb.Size = ((Button)sender).Size;
+
+        //    var size = new Control().Size;
+        //    size.Height = pb.Size.Height * 3;
+        //    size.Width = pb.Size.Width * 3;
+        //    //margin.Size = size;
+
+        //    pb.BackColor = ((Button)sender).BackColor;
+        //    //margin.SendToBack();
+        //    //margin.BackColor = Color.Transparent;
+
+        //    pb.Visible = true;
+        //    pb.Enabled = true;
+
+        //    UpdatePipeEvent += new UpdatePipeHandler(UpdatePipe);
+
+        //}
+
+
+
+
+        ////methods
+        //public virtual void Draw(Point position, Form1 form) // TODO: needs a point as a parameter?
+        //{
+
+
+        //    pb.Location = form.PointToClient(Cursor.Position);
+        //    //margin.Location = pb.Location;
+        //    //int lr, tb;
+        //    //lr = margin.Location.X - pb.Size.Width;
+        //    //tb = margin.Location.Y - pb.Size.Width;
+        //     position = new Point();
+        //    //position.X = lr;
+        //    //position.Y = tb;
+        //    //margin.Location = position;
+        //    form.Controls.Add(pb);
+        //    //form.Controls.Add(margin);
+        //}
+
+
+
+
+        //public virtual Pipe UpdatePipe(Pipe pipe,Form form) { return pipe; } // TODO: needs values as parameters?
+
+
+        //public virtual void AddInnerPipe(Pipe pipe,Form form)
+        //{
+        //    UpdatePipeEvent(pipe,form);
+        //}
+
+        //public virtual void AddOuterPipe(Pipe pipe,Form form)
+        //{
+        //    UpdatePipeEvent(pipe,form);
+        //}
 
 
     }

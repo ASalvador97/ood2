@@ -38,6 +38,12 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.Lb_Pump = new System.Windows.Forms.Label();
+            this.Lb_Sink = new System.Windows.Forms.Label();
+            this.Lb_Merger = new System.Windows.Forms.Label();
+            this.Lb_Splitter = new System.Windows.Forms.Label();
+            this.Lb_AdjSplitter = new System.Windows.Forms.Label();
+            this.Lb_Pipe = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -45,6 +51,12 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.panel1.Controls.Add(this.Lb_Pipe);
+            this.panel1.Controls.Add(this.Lb_AdjSplitter);
+            this.panel1.Controls.Add(this.Lb_Splitter);
+            this.panel1.Controls.Add(this.Lb_Merger);
+            this.panel1.Controls.Add(this.Lb_Sink);
+            this.panel1.Controls.Add(this.Lb_Pump);
             this.panel1.Controls.Add(this.button7);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.numericUpDown1);
@@ -56,12 +68,12 @@
             this.panel1.Controls.Add(this.button1);
             this.panel1.Location = new System.Drawing.Point(-2, -4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(136, 561);
+            this.panel1.Size = new System.Drawing.Size(136, 632);
             this.panel1.TabIndex = 0;
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(4, 516);
+            this.button7.Location = new System.Drawing.Point(3, 583);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(123, 33);
             this.button7.TabIndex = 1;
@@ -72,7 +84,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 467);
+            this.label1.Location = new System.Drawing.Point(11, 526);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 17);
             this.label1.TabIndex = 1;
@@ -80,7 +92,7 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(14, 487);
+            this.numericUpDown1.Location = new System.Drawing.Point(14, 546);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(92, 22);
             this.numericUpDown1.TabIndex = 1;
@@ -96,7 +108,8 @@
             this.button6.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.button6.FlatAppearance.BorderSize = 0;
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Location = new System.Drawing.Point(25, 361);
+            this.button6.Image = global::FlowNetworkDesigner.Properties.Resources.Pipe1;
+            this.button6.Location = new System.Drawing.Point(16, 427);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(63, 63);
             this.button6.TabIndex = 0;
@@ -109,7 +122,8 @@
             this.button5.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.button5.FlatAppearance.BorderSize = 0;
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Location = new System.Drawing.Point(25, 292);
+            this.button5.Image = global::FlowNetworkDesigner.Properties.Resources.AdjSplitter;
+            this.button5.Location = new System.Drawing.Point(14, 337);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(63, 63);
             this.button5.TabIndex = 0;
@@ -122,7 +136,8 @@
             this.button4.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.button4.FlatAppearance.BorderSize = 0;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Location = new System.Drawing.Point(25, 223);
+            this.button4.Image = global::FlowNetworkDesigner.Properties.Resources.Splitter;
+            this.button4.Location = new System.Drawing.Point(16, 259);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(63, 63);
             this.button4.TabIndex = 0;
@@ -135,7 +150,8 @@
             this.button3.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.button3.FlatAppearance.BorderSize = 0;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Location = new System.Drawing.Point(25, 154);
+            this.button3.Image = global::FlowNetworkDesigner.Properties.Resources.Merger;
+            this.button3.Location = new System.Drawing.Point(14, 180);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(63, 63);
             this.button3.TabIndex = 0;
@@ -148,7 +164,8 @@
             this.button2.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.button2.FlatAppearance.BorderSize = 0;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(25, 85);
+            this.button2.Image = global::FlowNetworkDesigner.Properties.Resources.Sink;
+            this.button2.Location = new System.Drawing.Point(16, 96);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(63, 63);
             this.button2.TabIndex = 0;
@@ -161,18 +178,73 @@
             this.button1.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(25, 16);
+            this.button1.Image = global::FlowNetworkDesigner.Properties.Resources.Pump;
+            this.button1.Location = new System.Drawing.Point(16, 16);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(63, 63);
             this.button1.TabIndex = 0;
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // Lb_Pump
+            // 
+            this.Lb_Pump.AutoSize = true;
+            this.Lb_Pump.Location = new System.Drawing.Point(87, 39);
+            this.Lb_Pump.Name = "Lb_Pump";
+            this.Lb_Pump.Size = new System.Drawing.Size(44, 17);
+            this.Lb_Pump.TabIndex = 1;
+            this.Lb_Pump.Text = "Pump";
+            // 
+            // Lb_Sink
+            // 
+            this.Lb_Sink.AutoSize = true;
+            this.Lb_Sink.Location = new System.Drawing.Point(85, 119);
+            this.Lb_Sink.Name = "Lb_Sink";
+            this.Lb_Sink.Size = new System.Drawing.Size(35, 17);
+            this.Lb_Sink.TabIndex = 1;
+            this.Lb_Sink.Text = "Sink";
+            // 
+            // Lb_Merger
+            // 
+            this.Lb_Merger.AutoSize = true;
+            this.Lb_Merger.Location = new System.Drawing.Point(82, 213);
+            this.Lb_Merger.Name = "Lb_Merger";
+            this.Lb_Merger.Size = new System.Drawing.Size(53, 17);
+            this.Lb_Merger.TabIndex = 1;
+            this.Lb_Merger.Text = "Merger";
+            // 
+            // Lb_Splitter
+            // 
+            this.Lb_Splitter.AutoSize = true;
+            this.Lb_Splitter.Location = new System.Drawing.Point(82, 282);
+            this.Lb_Splitter.Name = "Lb_Splitter";
+            this.Lb_Splitter.Size = new System.Drawing.Size(52, 17);
+            this.Lb_Splitter.TabIndex = 1;
+            this.Lb_Splitter.Text = "Splitter";
+            // 
+            // Lb_AdjSplitter
+            // 
+            this.Lb_AdjSplitter.AutoSize = true;
+            this.Lb_AdjSplitter.Location = new System.Drawing.Point(82, 360);
+            this.Lb_AdjSplitter.Name = "Lb_AdjSplitter";
+            this.Lb_AdjSplitter.Size = new System.Drawing.Size(48, 17);
+            this.Lb_AdjSplitter.TabIndex = 1;
+            this.Lb_AdjSplitter.Text = "AdjSpl";
+            // 
+            // Lb_Pipe
+            // 
+            this.Lb_Pipe.AutoSize = true;
+            this.Lb_Pipe.Location = new System.Drawing.Point(85, 450);
+            this.Lb_Pipe.Name = "Lb_Pipe";
+            this.Lb_Pipe.Size = new System.Drawing.Size(36, 17);
+            this.Lb_Pipe.TabIndex = 1;
+            this.Lb_Pipe.Text = "Pipe";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(916, 557);
+            this.ClientSize = new System.Drawing.Size(1026, 626);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -197,6 +269,12 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Label Lb_Pipe;
+        private System.Windows.Forms.Label Lb_AdjSplitter;
+        private System.Windows.Forms.Label Lb_Splitter;
+        private System.Windows.Forms.Label Lb_Merger;
+        private System.Windows.Forms.Label Lb_Sink;
+        private System.Windows.Forms.Label Lb_Pump;
     }
 }
 
