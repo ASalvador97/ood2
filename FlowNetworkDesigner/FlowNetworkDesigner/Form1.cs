@@ -21,8 +21,8 @@ namespace FlowNetworkDesigner
         //bool IsReadyToPaint;
 
         static Network network = new Network();
-        //public EditForm editForm = new EditForm(x); //connect with Dialog window (need for edit)
-        private string component; //variable, wich save value "Pump", "Sink", and also for buttons "Delete" and "Edit"
+        private string component; 
+        private bool Iscomponent;
 
         public Form1()
         {
@@ -30,7 +30,17 @@ namespace FlowNetworkDesigner
            
         }
 
-      
+        internal Network Network
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+
+            set
+            {
+            }
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -38,75 +48,30 @@ namespace FlowNetworkDesigner
             // ButtonClicked = sender;
             //component = new Pump(new Point(0, 0), sender,currentflow);
             component = "Pump";
-
-            //numericUpDownFlow.Visible = false;
-            //labelFlow.Visible = false;
-            //numericUpDownCapacity.Visible = true;
-            //labelCapacity.Visible = true;
-            //numericUpDown1.Visible = false;
-            //label9.Visible = false;
-            //numericUpDown2.Visible = false;
-            //label10.Visible = false;
+            Iscomponent = true;
+         
 
         }
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
-            if (component == "Pump") 
+            if (Iscomponent)
             {
-                network.AddPump(new Point(e.X - 20, e.Y - 20), "Pump", Convert.ToInt32(numericUpDown1.Value));
+                network.AddComponent(null, Convert.ToInt32(numericUpDown3.Value), new Point(e.X, e.Y), component, Convert.ToDouble(numericUpDown1.Value),Convert.ToDouble(numericUpDown2.Value));
+                Iscomponent = false;
+                numericUpDown3.Visible = false;
             }
-            if (component == "Sink") 
+
+            else if (component == "Pipeline") 
             {
-                network.AddSink(new Point(e.X - 20, e.Y - 20), "Sink", Convert.ToInt32(numericUpDown1.Value));
+                network.AddPipe(new Point(e.X, e.Y), "Pipeline");
             }
-            if (component == "Merger") 
-            {
-                network.AddMerger(new Point(e.X - 20, e.Y - 20), "Merger");
-            }
-            if (component == "Splitter") 
-            {
-                network.AddSplitter(new Point(e.X - 20, e.Y - 20), "Splitter");
-            }
-            //if (component == "Adjustable Splitter") 
-            //{
-            //    if (Convert.ToInt32(numericUpDown1.Value) + Convert.ToInt32(numericUpDown2.Value) == 100) //checking, has Adjustable splitter 100% or not
-            //    {
-            //        network.AddAjustableSplitter(new Point(e.X - 20, e.Y - 20), "Adjustable Splitter", Convert.ToInt32(numericUpDown1.Value), Convert.ToInt32(numericUpDown2.Value));
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("Please write values for adjustable splitter that add up to 100");
-            //    }
-            //}
-            if (component == "Pipeline") 
-            {
-                //there are around 46 pixels in diameter for merger and splitter picture
-                network.AddPipe(new Point(e.X, e.Y), "Pipeline", Convert.ToInt32(numericUpDown1.Value));
-            }
-            if (component == "Delete") 
+            else if (component == "Delete") 
             {
                 network.DeleteElementOrPipeline(new Point(e.X, e.Y));
             }
             this.Invalidate();
 
-            //if (component != null)
-            //{
-            //    component.Position = Cursor.Position;
-            //    component.pb.Click += Pb_Click;
-            //    network.AddComponent(component, this);
-            //    ((Button)ButtonClicked).PerformClick();
-            //}
-            //if (point != null)
-            //{
-            //    if (point.Count > 0)
-            //    {
-
-            //                point.Add(Cursor.Position);
-
-
-            //    }
-            //}
 
         }
         private List<Point> ConvertObjectToPoint()
@@ -148,15 +113,8 @@ namespace FlowNetworkDesigner
         private void button2_Click(object sender, EventArgs e)
          {
             component = "Sink";
-
-            //numericUpDownFlow.Visible = false;
-            //labelFlow.Visible = false;
-            //numericUpDownCapacity.Visible = true;
-            //labelCapacity.Visible = true;
-            //numericUpDown1.Visible = false;
-            //label9.Visible = false;
-            //numericUpDown2.Visible = false;
-            //label10.Visible = false;
+            Iscomponent = true;
+            
 
             //ButtonClicked = sender;
             //component = new Sink(new Point(0, 0), sender);
@@ -166,14 +124,6 @@ namespace FlowNetworkDesigner
         {
             component = "Pipeline";
 
-            //numericUpDownFlow.Visible = true;
-            //labelFlow.Visible = true;
-            //numericUpDownCapacity.Visible = false;
-            //labelCapacity.Visible = false;
-            //numericUpDown1.Visible = false;
-            //label9.Visible = false;
-            //numericUpDown2.Visible = false;
-            //label10.Visible = false;
 
             //component = null;
             //point = new List<object>();
@@ -182,7 +132,7 @@ namespace FlowNetworkDesigner
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            network.Painting(e.Graphics);
+            network.Draw(e.Graphics);
             //if (IsReadyToPaint)
             //{
 
@@ -200,64 +150,51 @@ namespace FlowNetworkDesigner
 
         private void button7_Click(object sender, EventArgs e)
         {
-            //https://stackoverflow.com/questions/37908570/how-to-delete-a-drawn-line-on-a-form
-            //Just create a pen with the same color of the background and redraw it in the same points, remove it from list after
+            
 
             component = "Delete";
 
-            //numericUpDownFlow.Visible = false;
-            //labelFlow.Visible = false;
-            //numericUpDownCapacity.Visible = false;
-            //labelCapacity.Visible = false;
-            //numericUpDown1.Visible = false;
-            //label9.Visible = false;
-            //numericUpDown2.Visible = false;
-            //label10.Visible = false;
+            
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             component = "Merger";
+            Iscomponent = true;
 
-            //numericUpDownFlow.Visible = false;
-            //labelFlow.Visible = false;
-            //numericUpDownCapacity.Visible = false;
-            //labelCapacity.Visible = false;
-            //numericUpDown1.Visible = false;
-            //label9.Visible = false;
-            //numericUpDown2.Visible = false;
-            //label10.Visible = false;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             component = "Splitter";
-
-            //numericUpDownFlow.Visible = false;
-            //labelFlow.Visible = false;
-            //numericUpDownCapacity.Visible = false;
-            //labelCapacity.Visible = false;
-            //numericUpDown1.Visible = false;
-            //label9.Visible = false;
-            //numericUpDown2.Visible = false;
-            //label10.Visible = false;
+            Iscomponent = true;
+            
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             component = "Adjustable Splitter";
+            numericUpDown3.Visible = true;
+            Iscomponent = true;
+            
+        }
 
-            //numericUpDown1.Visible = true;
-            //label9.Visible = true;
-            //numericUpDown2.Visible = true;
-            //label10.Visible = true;
-            //numericUpDownFlow.Visible = false;
-            //labelFlow.Visible = false;
-            //numericUpDownCapacity.Visible = false;
-            //labelCapacity.Visible = false;
-            //ButtonClicked = sender;
+        private void button8_Click(object sender, EventArgs e)
+        {
+            network.Save();
+        }
 
-            //component = new AdjSplitter(new Point(0, 0), sender);
+        private void button9_Click(object sender, EventArgs e)
+        {
+            try
+            {
+               network.Load();
+            }
+            catch (Exception)
+            {
+
+            }
+           
         }
     }
 }

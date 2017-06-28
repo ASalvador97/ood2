@@ -10,35 +10,38 @@ namespace FlowNetworkDesigner
 {
     public abstract class  Component
     {
-        public Point Location { get; set; }
+
+        public Point Position { get; set; }
         public Image Image { get; set; }
         public string Name { get; set; }
+        public double Flow { get; set; }
 
-        public Component(Point location, string name) 
+        public Component(Point position, string name) 
         {
-            Location = location;
+            Position = position;
             Name = name;
         }
-        public bool Contains(Point p) // for public Element CheckElement(Point p) in class PipelineNetwork
+        public bool Contains(Point p) // for method public Component CheckComponent(Point p) in class Network
         {
-            if (p == Location || ((p.X > Location.X && p.X < Location.X + 40) && (p.Y > Location.Y && p.Y < Location.Y + 40)))
+            if (p == Position || ((p.X > Position.X && p.X < Position.X + 63) && (p.Y > Position.Y && p.Y < Position.Y + 63)))
             {
                 return true;
             }
             return false;
         }
 
+        public virtual void AddPipe(Pipe pipe) { }
 
         public virtual void Draw(Graphics graphic) { }
 
-        public bool ContainsTogether(Point p) // only for adding elements (checking if this place has element or not)
-        {
-            if (p == Location || ((p.X + 30 > Location.X && p.X < Location.X + 40) && (p.Y + 30 > Location.Y && p.Y < Location.Y + 40)))
-            {
-                return true;
-            }
-            return false;
-        }
+        //public bool ContainsTogether(Point p) // only for adding elements (checking if this place has element or not)
+        //{
+        //    if (p == Position || ((p.X + 30 > Position.X && p.X < Position.X + 40) && (p.Y + 30 > Position.Y && p.Y < Position.Y + 40)))
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         ////properties
         //public double Flow { get; set; }

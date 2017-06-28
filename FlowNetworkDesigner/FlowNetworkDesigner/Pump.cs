@@ -10,12 +10,17 @@ namespace FlowNetworkDesigner
 {
      public class Pump:Component
      {
-        //variables
-         public double Flow { get; set; }
-         //private Pipe OuterPipe;
-         
-         //constructor       
-         public Pump(Point p, string name,double currentFlow)
+     
+
+        public Pipe OutPipe
+        {
+            get; set;
+        }
+
+ 
+
+        //constructor       
+        public Pump(Point p, string name,double currentFlow)
              :base(p,name)
         {
             // TODO initiate pipe?
@@ -33,12 +38,16 @@ namespace FlowNetworkDesigner
          public override void Draw(Graphics graphic)
          {
             Size size = new Size(Image.Width, Image.Height);
-            Rectangle rectangle = new Rectangle(Location, size);
+            Rectangle rectangle = new Rectangle(Position, size);
             graphic.DrawImage(Image, rectangle);
 
-            graphic.DrawString("Capacity " + Flow.ToString(), new Font("Arial", 8, FontStyle.Regular), Brushes.Black, Location.X - 6, Location.Y - 20);
+            graphic.DrawString("Flow " + Flow.ToString(), new Font("Arial", 8, FontStyle.Regular), Brushes.Black, Position.X - 6, Position.Y - 20);
 
         }
-        
-     }
+        public override void AddPipe(Pipe pipe)
+        {
+            OutPipe = pipe;
+        }
+
+    }
 }

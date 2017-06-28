@@ -11,105 +11,89 @@ namespace FlowNetworkDesigner
 {
     class Network
     {
-        int i = 1; //for the splitter1 class -> "index"
-        int checkPump = 0; // for Pump in addPupmpline
-        internal List<Component> Components = new List<Component>(); //Create list with all elements
-        internal List<Pipe> Pipes = new List<Pipe>(); //Create list with all pipelines
-        internal List<Splitter> Splitters = new List<Splitter>(); //Create list with all splitters
-        internal List<Merger> Mergers = new List<Merger>(); //Create list with all mergers
-        internal List<AdjSplitter> AdjSplitters = new List<AdjSplitter>(); //Create list with all adjustable splitters
+        int i = 1; 
+        int checkPump = 0; 
+        internal List<Component> Components = new List<Component>(); 
+        internal List<Pipe> Pipes = new List<Pipe>(); 
+        internal List<Splitter> Splitters = new List<Splitter>(); 
+        internal List<Merger> Mergers = new List<Merger>();
+        internal List<AdjSplitter> AdjSplitters = new List<AdjSplitter>(); 
         Splitter splitter;
         Merger merger;
         AdjSplitter adjsplit;
 
-        Point tempPoint = new Point(); //for AddPipeline
-        bool position = false; //for AddPipeline
+        List<Component> componentlist = new List<Component>();//only contains two components, this is for when clicking a component to add pipe
+
+        Point tempPoint = new Point(); //for AddPipeline method
+        bool position = false; //for AddPipeline method
         public Network() { }
-        public void AddPump(Point p, string name, int capacity) //Add pump in list 
+
+        public Pipe Pipe
         {
-            Component comp = CheckElementTogether(p);
+            get
             {
-                if (comp != null)
-                {
-                    MessageBox.Show("Select empty space.");
-                }
-                else
-                {
-                    Components.Add(new Pump(p, name, capacity));
-                }
+                throw new System.NotImplementedException();
             }
-        }
-        public void AddSink(Point p, string name, int capacity) //Add sink in list 
-        {
-            Component comp = CheckElementTogether(p);
+
+            set
             {
-                if (comp != null)
-                {
-                    MessageBox.Show("Select empty space.");
-                }
-                else
-                {
-                    Components.Add(new Sink(p, name, capacity));
-                }
-            }
-        }
-        public void AddMerger(Point p, string name) //Add merger in lists 
-        {
-            Component comp = CheckElementTogether(p);
-            {
-                if (comp != null)
-                {
-                    MessageBox.Show("Select empty space.");
-                }
-                else
-                {
-                    merger = new Merger(p, name);
-                    Components.Add(merger);
-                    Mergers.Add(merger);
-                }
-            }
-        }
-        public void AddSplitter(Point p, string name) //Add splitter in lists 
-        {
-            Component comp = CheckElementTogether(p);
-            {
-                if (comp != null)
-                {
-                    MessageBox.Show("Select empty space.");
-                }
-                else
-                {
-                    splitter = new Splitter(p, name);
-                    Splitters.Add(splitter);
-                    Components.Add(splitter);
-                }
-            }
-        }
-        public void AddAdjSplitter(Point p, string name, int percup, int percdown) //Add adjustable splitter in lists
-        {
-            Component comp = CheckElementTogether(p);
-            {
-                if (comp != null)
-                {
-                    MessageBox.Show("Select empty space.");
-                }
-                else
-                {
-                    adjsplit = new AdjSplitter(p, name, percup, percdown);
-                    Components.Add(adjsplit);
-                    AdjSplitters.Add(adjsplit);
-                }
             }
         }
 
-        public void AddPipe(Point p, string name, int flow) 
+        public Component Component
         {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+
+            set
+            {
+            }
+        }
+
+        public void AddComponent(Component component, int percentage,Point position,string type,double currentFlow,double maxFlow)
+        {
+            if (type == "Pump")
+            {
+                component = new Pump(position, type, currentFlow);
+            }
+            else if (type == "Sink")
+            {
+                component = new Sink(position, type, maxFlow);
+            }
+            else if (type == "Merger")
+            {
+                component = new Merger(position, type);
+                Mergers.Add(((Merger)component));
+            }
+            else if (type == "Splitter")
+            {
+                component = new Splitter(position, type);
+                Splitters.Add(((Splitter)component));
+            }
+            else if (type == "AdjSplitter")
+            {
+                component = new AdjSplitter(position, type,percentage);
+                AdjSplitters.Add(((AdjSplitter)component));
+            }
+
+
+            if (CheckAddingComponents(component))
+            {
+
+                Components.Add(component);
+                // component.Draw(component.Position, form);
+            }
+        }
+
+        public void AddPipe(Point p, string name) 
+        {
+           
             int xx = 0;
             Component comp = CheckComponent(p);
-            List<Component> componentlist = new List<Component>();
             componentlist.Add(comp);
-
-            if (comp != null) //here we check is "p" empty space or element
+            if (comp != null) //If comp is not null means user clicked on a component in the form else it returns null
             {
                 if (position == false) //if click first time (first point of pipeline)
                 {
@@ -119,28 +103,13 @@ namespace FlowNetworkDesigner
                     if (comp is Pump) 
                     {
                         checkPump++;
-                        foreach (Pump pp in componentlist)
-                        {
-                            if (pp.Flow < flow)
-                            {
-                                MessageBox.Show("Flow cannot be more than capacity");
-                                checkPump = 0;
-                                position = false;
-                            }
-                        }
+                        
                     }             
 
-                    if (comp is Sink) 
+                   else if (comp is Sink) 
                     {
-                        int x = CheckPipelineForSink(p).Count();
-                        foreach (Sink pp in componentlist)
-                        {
-                            if (pp.Flow < flow)
-                            {
-                                MessageBox.Show("Flow cannot be more than capacity");
-                                position = false;
-                            }
-                        }
+                        int x = CheckPipelineForSink(p,comp).Count();
+                        
                         if (x > 1)
                         {
                             MessageBox.Show("The sink can not have more then 2 input ");
@@ -152,40 +121,21 @@ namespace FlowNetworkDesigner
                 {
                     if (comp is Pump && checkPump == 1) 
                     {
-                        MessageBox.Show("Connection cannot be between two Pumps. Please select another element");
+                        MessageBox.Show("Pump can not be your next component");
                         checkPump--;
                         position = false;
                     }
                     else
                     {
-                        if (comp is Pump && checkPump == 0)
-                        {
-                            foreach (Pump pp in componentlist)
-                            {
-                                if (pp.Flow < flow)
-                                {
-                                    MessageBox.Show("Flow cannot be more than capacity");
-                                    xx = 1;
-                                    position = false;
-                                }
-                            }
-                        }
+                       
                         if (!(comp is Pump))
                         {
                             checkPump = 0;
                         }                           
                         if (comp is Sink)            
                         {
-                            int x = CheckPipelineForSink(p).Count();
-                            foreach (Sink pp in componentlist)
-                            {
-                                if (pp.Flow < flow)
-                                {
-                                    MessageBox.Show("Flow cannot be more than capacity");
-                                    xx = 1;
-                                    position = false;
-                                }
-                            }
+                            int x = CheckPipelineForSink(p,comp).Count();
+                           
                             if (x > 1)
                             {
                                 MessageBox.Show("The sink can not have more then 2 input ");
@@ -195,41 +145,74 @@ namespace FlowNetworkDesigner
                             }
                         }                        
 
-                        if (!(xx == 1))
+                        if (xx == 0)
                         {
-                            Pipe plf = new Pipe(tempPoint, p, name, flow);
+                            Pipe plf = new Pipe(tempPoint, p, name);
+                            foreach (Component c in Components)
+                            {
+                                if (c == componentlist[0] && c is Pump|| c == componentlist[1] && c is Pump)
+                                {
+                                    plf.Flow = c.Flow;
+                                    c.AddPipe(plf);
+                                }
+                                if(c == componentlist[0] && c is Sink || c == componentlist[1] && c is Sink)
+                                {
+                                    c.AddPipe(plf);
+                                }
+                                if (c == componentlist[0] && c is Splitter || c == componentlist[1] && c is Splitter)
+                                {
+                                    if (((Splitter)c).listPipeInputSplitter.Count == 0)
+                                    {
+                                        c.AddPipe(plf);
+                                    }
+                                }
+                            }
                             Pipes.Add(plf);
-
+                          
                             foreach (Component e in Components.ToList()) 
                             {
-                                if ((tempPoint.X + 46 >= e.Location.X && (tempPoint.Y + 46 >= e.Location.Y) && (tempPoint.X - 46 <= e.Location.X) && (tempPoint.Y - 46 <= e.Location.Y) && (e is Splitter) && !(e is AdjSplitter)))
+                                if ((tempPoint.X + 63 >= e.Position.X && (tempPoint.Y + 63 >= e.Position.Y) && (tempPoint.X - 63 <= e.Position.X) && (tempPoint.Y - 63 <= e.Position.Y) && (e is Splitter) && !(e is AdjSplitter)))
                                 {
-                                    CheckSplitter(p, name, flow, e, plf);
+                                    CheckSplitter(p, name, e, plf);
                                 }
-                                else if (tempPoint.X + 46 >= e.Location.X && (tempPoint.Y + 46 >= e.Location.Y) && (tempPoint.X - 46 <= e.Location.X) && (tempPoint.Y - 46 <= e.Location.Y) && (e is AdjSplitter))
+                                else if (tempPoint.X + 63 >= e.Position.X && (tempPoint.Y + 63 >= e.Position.Y) && (tempPoint.X - 63 <= e.Position.X) && (tempPoint.Y - 63 <= e.Position.Y) && (e is AdjSplitter))
                                 {
-                                    CheckAdjustableSplitter(p, name, flow, e, plf);
+                                    CheckAdjustableSplitter(p, name, e, plf);
                                 }
-                                else if ((p.X + 46 >= e.Location.X && (p.Y + 46 >= e.Location.Y) && (p.X - 46 <= e.Location.X) && (p.Y - 46 <= e.Location.Y) && (e is Splitter) && !(e is AdjSplitter)))
+                                else if ((p.X + 63 >= e.Position.X && (p.Y + 63 >= e.Position.Y) && (p.X - 63 <= e.Position.X) && (p.Y - 63 <= e.Position.Y) && (e is Splitter) && !(e is AdjSplitter)))
                                 {
+                                    splitter = new Splitter(e.Position,e.Name);
                                     splitter.listPipeInputSplitter.Add(plf);
-                                    CheckSplitter1(p, name, flow, e, plf);
+                                    CheckSplitter1(p, name, e, plf);
                                 }
-                                else if (p.X + 46 >= e.Location.X && (p.Y + 46 >= e.Location.Y) && (p.X - 46 <= e.Location.X) && (p.Y - 46 <= e.Location.Y) && (e is AdjSplitter))
+                                else if (p.X + 63 >= e.Position.X && (p.Y + 63 >= e.Position.Y) && (p.X - 63 <= e.Position.X) && (p.Y - 63 <= e.Position.Y) && (e is AdjSplitter))
                                 {
+                                    adjsplit = new AdjSplitter(e.Position, e.Name,100);
                                     adjsplit.listPipeInputSplitter.Add(plf);
-                                    CheckAdjustableSplitter1(p, name, flow, e, plf);
+                                    CheckAdjustableSplitter1(p, name, e, plf);
                                 }
-                                if (((p.X + 46 >= e.Location.X && (p.Y + 46 >= e.Location.Y) && (p.Y - 46 <= e.Location.Y) && (e is Merger))))
+                                if (((p.X + 63 >= e.Position.X && (p.Y + 63 >= e.Position.Y) && (p.Y - 63 <= e.Position.Y) && (e is Merger))))
                                 {
-                                    CheckMerger(p, name, flow, e, plf);
+                                    CheckMerger(p, name, e, plf);
                                 }
-                                else if (((tempPoint.X + 46 >= e.Location.X && (tempPoint.Y + 46 >= e.Location.Y) && (tempPoint.Y - 46 <= e.Location.Y) && (e is Merger))))
+                                else if (((tempPoint.X + 63 >= e.Position.X && (tempPoint.Y + 63 >= e.Position.Y) && (tempPoint.Y - 63 <= e.Position.Y) && (e is Merger))))
                                 {
-                                    merger.listPipelineOutputMerger.Add(plf);
-                                    CheckMerger1(p, name, flow, e, plf);
+                                    try
+                                    {
+                                        merger.listPipelineOutputMerger.Add(plf);
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                    }
+                                    CheckMerger1(p, name, e, plf);
                                 }
                                 position = false;
+                            }
+
+                            if (componentlist.Count == 2)
+                            {
+                                componentlist = new List<Component>();
                             }
                         }
                     }
@@ -237,26 +220,35 @@ namespace FlowNetworkDesigner
             }
         }
 
-        internal List<Pipe> CheckPipelineForSink(Point p)
+        internal List<Pipe> CheckPipelineForSink(Point p, Component comp)
         {
             List<Pipe> temp;
             temp = new List<Pipe>();
             foreach (Pipe pl in Pipes)
             {
-                if (pl.ContainsForSink(p) == true)
+                if (ContainsForSink(pl.FirstPoint,comp) == true || ContainsForSink(pl.SecondPoint, comp) == true)
                 {
                     temp.Add(pl);
                 }
+                
             }
             return temp;
         }
+        private bool ContainsForSink(Point p , Component comp)
+        {
+            if (p.X  >= comp.Position.X && p.X <=(comp.Position.X+63) && p.Y >= comp.Position.Y && p.Y  <= (comp.Position.Y+63))
+            {
+                return true;
+            }
+            return false;
+        }
 
-        //check splitter 
-        internal void CheckSplitter(Point p, string name, int flow, Component e, Pipe plf) //calculation for splitter
+       
+        internal void CheckSplitter(Point p, string name, Component e, Pipe plf) 
         {
             foreach (Splitter spl in Splitters)
             {
-                if (spl.Location == e.Location)
+                if (spl.Position == e.Position)
                 {
                     splitter = spl;
                 }
@@ -278,27 +270,34 @@ namespace FlowNetworkDesigner
 
             if (splitter.listPipeOutputSplitter.Count == 1)
             {
-                splitter.listPipeOutputSplitter[0].Flow = flow;
+                try
+                {
+                    splitter.listPipeOutputSplitter[0].Flow = splitter.listPipeInputSplitter[0].Flow;
+                }
+                catch (Exception)
+                {
+
+                }
                 foreach (Pipe pl in splitter.listPipeOutputSplitter)
                 {
-                    if ((pl.FirstPoint.X) + 46 >= e.Location.X && ((pl.FirstPoint.Y) + 46 >= e.Location.Y && (pl.FirstPoint.X) - 46 <= e.Location.X) && ((pl.FirstPoint.X) + 46 >= e.Location.X) && (e is Splitter))
+                    if ((pl.FirstPoint.X) + 63 >= e.Position.X && ((pl.FirstPoint.Y) + 63 >= e.Position.Y && (pl.FirstPoint.X) - 63 <= e.Position.X) && ((pl.FirstPoint.X) + 63 >= e.Position.X) && (e is Splitter))
                     {
-                        pl.FirstPoint = e.Location;
+                        pl.FirstPoint = e.Position;
                     }
                 }
 
                 foreach (Pipe pl in Pipes)
                 {
-                    if ((pl.FirstPoint.X) + 46 >= e.Location.X && ((pl.FirstPoint.Y) + 46 >= e.Location.Y && (pl.FirstPoint.X) - 46 <= e.Location.X) && ((pl.FirstPoint.X) + 46 >= e.Location.X) && (e is Splitter))
+                    if ((pl.FirstPoint.X) + 63 >= e.Position.X && ((pl.FirstPoint.Y) + 63 >= e.Position.Y && (pl.FirstPoint.X) - 63 <= e.Position.X) && ((pl.FirstPoint.X) + 63 >= e.Position.X) && (e is Splitter))
                     {
-                        pl.FirstPoint = e.Location;
+                        pl.FirstPoint = e.Position;
                     }
                 }
             }
             else if (splitter.listPipeOutputSplitter.Count == 2)
             {
-                splitter.listPipeOutputSplitter[0].Flow = flow / 2;
-                splitter.listPipeOutputSplitter[1].Flow = flow / 2;
+                splitter.listPipeOutputSplitter[0].Flow = splitter.listPipeInputSplitter[0].Flow / 2;
+                splitter.listPipeOutputSplitter[1].Flow = splitter.listPipeInputSplitter[0].Flow / 2;
             }
             else if (splitter.listPipeOutputSplitter.Count > 2)
             {
@@ -325,12 +324,12 @@ namespace FlowNetworkDesigner
             }
         }
 
-        //check splitter1 
-        internal void CheckSplitter1(Point p, string name, int flow, Component e, Pipe plf)
+       
+        internal void CheckSplitter1(Point p, string name, Component e, Pipe plf)
         {
             foreach (Splitter spl in Splitters)
             {
-                if (spl.Location == e.Location)
+                if (spl.Position == e.Position)
                 {
                     splitter = spl;
                 }
@@ -376,38 +375,38 @@ namespace FlowNetworkDesigner
 
             if (splitter.listPipeOutputSplitter.Count == 1)
             {
-                splitter.listPipeOutputSplitter[0].Flow = flow;
+                splitter.listPipeOutputSplitter[0].Flow = splitter.listPipeInputSplitter[0].Flow;
                 foreach (Pipe pl in splitter.listPipeOutputSplitter)
                 {
-                    if ((pl.FirstPoint.X) + 46 >= e.Location.X && ((pl.FirstPoint.Y) + 46 >= e.Location.Y && (pl.FirstPoint.X) - 46 <= e.Location.X) && ((pl.FirstPoint.X) + 46 >= e.Location.X) && (e is Splitter))
+                    if ((pl.FirstPoint.X) + 63 >= e.Position.X && ((pl.FirstPoint.Y) + 63 >= e.Position.Y && (pl.FirstPoint.X) - 63 <= e.Position.X) && ((pl.FirstPoint.X) + 63 >= e.Position.X) && (e is Splitter))
                     {
-                        pl.FirstPoint = e.Location;
+                        pl.FirstPoint = e.Position;
                     }
                 }
 
                 foreach (Pipe pl in Pipes)
                 {
-                    if ((pl.FirstPoint.X) + 46 >= e.Location.X && ((pl.FirstPoint.Y) + 46 >= e.Location.Y && (pl.FirstPoint.X) - 46 <= e.Location.X) && ((pl.FirstPoint.X) + 46 >= e.Location.X) && (e is Splitter))
+                    if ((pl.FirstPoint.X) + 63 >= e.Position.X && ((pl.FirstPoint.Y) + 63 >= e.Position.Y && (pl.FirstPoint.X) - 63 <= e.Position.X) && ((pl.FirstPoint.X) + 63 >= e.Position.X) && (e is Splitter))
                     {
-                        pl.FirstPoint = e.Location;
+                        pl.FirstPoint = e.Position;
                     }
                 }
             }
             else if (splitter.listPipeOutputSplitter.Count == 2)
             {
-                splitter.listPipeOutputSplitter[0].Flow = flow / 2;
-                splitter.listPipeOutputSplitter[1].Flow = flow / 2;
+                splitter.listPipeOutputSplitter[0].Flow = splitter.listPipeInputSplitter[0].Flow / 2;
+                splitter.listPipeOutputSplitter[1].Flow = splitter.listPipeInputSplitter[0].Flow / 2;
             }
         }
 
 
 
-        //check adjustable splitter 
-        internal void CheckAdjustableSplitter(Point p, string name, int flow, Component e, Pipe plf) //calculation for adjustable splitter
+        
+        internal void CheckAdjustableSplitter(Point p, string name, Component e, Pipe plf)
         {
             foreach (AdjSplitter spl in AdjSplitters)
             {
-                if (spl.Location == e.Location)
+                if (spl.Position == e.Position)
                 {
                     adjsplit = spl;
                 }
@@ -430,27 +429,27 @@ namespace FlowNetworkDesigner
 
             if (adjsplit.listPipeOutputSplitter.Count == 1)
             {
-                adjsplit.listPipeOutputSplitter[0].Flow = flow;
+                adjsplit.listPipeOutputSplitter[0].Flow = adjsplit.listPipeInputSplitter[0].Flow;
                 foreach (Pipe pl in adjsplit.listPipeOutputSplitter)
                 {
-                    if ((pl.FirstPoint.X) + 46 >= e.Location.X && ((pl.FirstPoint.Y) + 46 >= e.Location.Y && (pl.FirstPoint.X) - 46 <= e.Location.X) && ((pl.FirstPoint.X) + 46 >= e.Location.X) && (e is Splitter))
+                    if ((pl.FirstPoint.X) + 63 >= e.Position.X && ((pl.FirstPoint.Y) + 63 >= e.Position.Y && (pl.FirstPoint.X) - 63 <= e.Position.X) && ((pl.FirstPoint.X) + 63 >= e.Position.X) && (e is Splitter))
                     {
-                        pl.FirstPoint = e.Location;
+                        pl.FirstPoint = e.Position;
                     }
                 }
 
                 foreach (Pipe pl in Pipes)
                 {
-                    if ((pl.FirstPoint.X) + 46 >= e.Location.X && ((pl.FirstPoint.Y) + 46 >= e.Location.Y && (pl.FirstPoint.X) - 46 <= e.Location.X) && ((pl.FirstPoint.X) + 46 >= e.Location.X) && (e is Splitter))
+                    if ((pl.FirstPoint.X) + 63 >= e.Position.X && ((pl.FirstPoint.Y) + 63 >= e.Position.Y && (pl.FirstPoint.X) - 63 <= e.Position.X) && ((pl.FirstPoint.X) + 63 >= e.Position.X) && (e is Splitter))
                     {
-                        pl.FirstPoint = e.Location;
+                        pl.FirstPoint = e.Position;
                     }
                 }
             }
             else if (adjsplit.listPipeOutputSplitter.Count == 2)
             {
-                adjsplit.listPipeOutputSplitter[0].Flow = Convert.ToInt32(flow * adjsplit.upValue / 100);
-                adjsplit.listPipeOutputSplitter[1].Flow = Convert.ToInt32(flow * adjsplit.downValue / 100);
+                adjsplit.listPipeOutputSplitter[0].Flow = Convert.ToDouble(adjsplit.listPipeInputSplitter[0].Flow * adjsplit.upValue / 100);
+                adjsplit.listPipeOutputSplitter[1].Flow = Convert.ToDouble(adjsplit.listPipeInputSplitter[0].Flow - (adjsplit.listPipeInputSplitter[0].Flow * adjsplit.upValue / 100));
             }
             else if (adjsplit.listPipeOutputSplitter.Count > 2)
             {
@@ -478,12 +477,12 @@ namespace FlowNetworkDesigner
             }
         }
 
-        //check adjsplitter1 
-        internal void CheckAdjustableSplitter1(Point p, string name, int flow, Component e, Pipe plf)
+        
+        internal void CheckAdjustableSplitter1(Point p, string name, Component e, Pipe plf)
         {
             foreach (AdjSplitter spl in AdjSplitters)
             {
-                if (spl.Location == e.Location)
+                if (spl.Position == e.Position)
                 {
                     adjsplit = spl;
                 }
@@ -528,46 +527,46 @@ namespace FlowNetworkDesigner
 
             if (adjsplit.listPipeOutputSplitter.Count == 1)
             {
-                splitter.listPipeOutputSplitter[0].Flow = flow;
+                adjsplit.listPipeOutputSplitter[0].Flow = adjsplit.listPipeInputSplitter[0].Flow;
                 foreach (Pipe pl in adjsplit.listPipeOutputSplitter)
                 {
-                    if ((pl.FirstPoint.X) + 46 >= e.Location.X && ((pl.FirstPoint.Y) + 46 >= e.Location.Y && (pl.FirstPoint.X) - 46 <= e.Location.X) && ((pl.FirstPoint.X) + 46 >= e.Location.X) && (e is Splitter))
+                    if ((pl.FirstPoint.X) + 63 >= e.Position.X && ((pl.FirstPoint.Y) + 63 >= e.Position.Y && (pl.FirstPoint.X) - 63 <= e.Position.X) && ((pl.FirstPoint.X) + 63 >= e.Position.X) && (e is Splitter))
                     {
-                        pl.FirstPoint = e.Location;
+                        pl.FirstPoint = e.Position;
                     }
                 }
 
                 foreach (Pipe pl in Pipes)
                 {
-                    if ((pl.FirstPoint.X) + 46 >= e.Location.X && ((pl.FirstPoint.Y) + 46 >= e.Location.Y && (pl.FirstPoint.X) - 46 <= e.Location.X) && ((pl.FirstPoint.X) + 46 >= e.Location.X) && (e is Splitter))
+                    if ((pl.FirstPoint.X) + 63 >= e.Position.X && ((pl.FirstPoint.Y) + 63 >= e.Position.Y && (pl.FirstPoint.X) - 63 <= e.Position.X) && ((pl.FirstPoint.X) + 63 >= e.Position.X) && (e is Splitter))
                     {
-                        pl.FirstPoint = e.Location;
+                        pl.FirstPoint = e.Position;
                     }
                 }
             }
             else if (adjsplit.listPipeOutputSplitter.Count == 2)
             {
-                adjsplit.listPipeOutputSplitter[0].Flow = Convert.ToInt32(flow * adjsplit.upValue / 100);
-                adjsplit.listPipeOutputSplitter[1].Flow = Convert.ToInt32(flow * adjsplit.downValue / 100);
+                adjsplit.listPipeOutputSplitter[0].Flow = Convert.ToInt32(adjsplit.listPipeInputSplitter[0].Flow * adjsplit.upValue / 100);
+                adjsplit.listPipeOutputSplitter[1].Flow = Convert.ToInt32(adjsplit.listPipeInputSplitter[0].Flow - (adjsplit.listPipeInputSplitter[0].Flow * adjsplit.upValue / 100));
             }
         }
 
         
-        internal void CheckMerger(Point p, string name, int flow, Component e, Pipe plf)  //calculation for merger
+        internal void CheckMerger(Point p, string name, Component e, Pipe plf)  
         {
             foreach (Merger merg in Mergers)
             {
-                if (merg.Location == e.Location)
+                if (merg.Position == e.Position)
                 {
                     merger = merg;
                 }
             }
 
-            if ((tempPoint.X + 46 >= e.Location.X && (tempPoint.Y + 46 >= e.Location.Y) && ((tempPoint.X - 46 <= e.Location.X) && (tempPoint.Y - 46 <= e.Location.Y)) && (e is Merger)))
+            if ((tempPoint.X + 63 >= e.Position.X && (tempPoint.Y + 63 >= e.Position.Y) && ((tempPoint.X - 63 <= e.Position.X) && (tempPoint.Y - 63 <= e.Position.Y)) && (e is Merger)))
             {
                 merger.listPipelineOutputMerger.Add(plf);
             }
-            if ((p.X + 46 >= e.Location.X && (p.Y + 46 >= e.Location.Y) && ((p.X - 46 <= e.Location.X) && (p.Y - 46 <= e.Location.Y)) && (e is Merger)))
+            if ((p.X + 63 >= e.Position.X && (p.Y + 63 >= e.Position.Y) && ((p.X - 63 <= e.Position.X) && (p.Y - 63 <= e.Position.Y)) && (e is Merger)))
             {
                 merger.listPipelineInputMerger.Add(plf);
 
@@ -600,26 +599,26 @@ namespace FlowNetworkDesigner
 
             if (merger.listPipelineInputMerger.Count == 1)
             {
-                merger.listPipelineInputMerger[0].Flow = flow;
+                merger.listPipelineInputMerger[0].Flow = plf.Flow;
 
                 foreach (Pipe pl in merger.listPipelineInputMerger)
                 {
-                    if ((pl.SecondPoint.X) + 46 >= e.Location.X && ((pl.SecondPoint.Y) + 46 >= e.Location.Y && (pl.SecondPoint.X) - 46 <= e.Location.X) && ((pl.SecondPoint.X) + 46 >= e.Location.X) && (e is Merger))
+                    if ((pl.SecondPoint.X) + 63 >= e.Position.X && ((pl.SecondPoint.Y) + 63 >= e.Position.Y && (pl.SecondPoint.X) - 63 <= e.Position.X) && ((pl.SecondPoint.X) + 63 >= e.Position.X) && (e is Merger))
                     {
-                        pl.SecondPoint = new Point(e.Location.X + 18, e.Location.Y + 18);
+                        pl.SecondPoint = new Point(e.Position.X + 18, e.Position.Y + 18);
                     }
                 }
                 foreach (Pipe pl in Pipes)
                 {
-                    if ((pl.SecondPoint.X) + 46 >= e.Location.X && ((pl.SecondPoint.Y) + 46 >= e.Location.Y && (pl.SecondPoint.X) - 46 <= e.Location.X) && ((pl.SecondPoint.X) + 46 >= e.Location.X) && (e is Merger))
+                    if ((pl.SecondPoint.X) + 63 >= e.Position.X && ((pl.SecondPoint.Y) + 63 >= e.Position.Y && (pl.SecondPoint.X) - 63 <= e.Position.X) && ((pl.SecondPoint.X) + 63 >= e.Position.X) && (e is Merger))
                     {
-                        pl.SecondPoint = new Point(e.Location.X + 18, e.Location.Y + 18);
+                        pl.SecondPoint = new Point(e.Position.X + 18, e.Position.Y + 18);
                     }
                 }
             }
             else if (merger.listPipelineInputMerger.Count == 2 && merger.listPipelineOutputMerger.Count == 1)
             {
-                int final = 0;
+                double final = 0;
                 foreach (Pipe pl in merger.listPipelineInputMerger)
                 {
                     final += pl.Flow;
@@ -629,11 +628,11 @@ namespace FlowNetworkDesigner
         }
 
        
-        internal void CheckMerger1(Point p, string name, int flow, Component e, Pipe plf)
+        internal void CheckMerger1(Point p, string name, Component e, Pipe plf)
         {
             if (merger.listPipelineInputMerger.Count == 2 && merger.listPipelineOutputMerger.Count == 1)
             {
-                int final = 0;
+                double final = 0;
                 foreach (Pipe pl in merger.listPipelineInputMerger)
                 {
                     final += pl.Flow;
@@ -654,6 +653,23 @@ namespace FlowNetworkDesigner
         }
 
 
+        //Checks if the point you clicked is valid and not next to a component
+        private bool CheckAddingComponents(Component comp)
+        {
+            if (Components.Count > 0)
+            {
+                foreach (Component c in Components)
+                {
+                    if (comp.Position.X >= (c.Position.X - 63) && comp.Position.Y >= (c.Position.Y - 63) && comp.Position.X <= (c.Position.X + 63) && comp.Position.Y <= (c.Position.Y + 63))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+
+        }
 
         internal Component CheckComponent(Point p) // for pipeline (checking, does picture include point p) 
         {
@@ -666,18 +682,7 @@ namespace FlowNetworkDesigner
             }
             return null;
         }
-
-        internal Component CheckElementTogether(Point p) // only for adding elements (checking if this place has element or not) 
-        {
-            foreach (Component e in Components)
-            {
-                if (e.ContainsTogether(p) == true)
-                {
-                    return e;
-                }
-            }
-            return null;
-        }
+        
 
         internal Pipe CheckPipeline(Point p) //checking, does pipeline include point p 
         {
@@ -690,16 +695,22 @@ namespace FlowNetworkDesigner
             }
             return null;
         }
-        public void Painting(Graphics graphic) //Draw all elements and pipelines 
+        public void Draw(Graphics graphic) 
         {
-            foreach (Pipe p in Pipes)
-            {
-                p.Draw(graphic);
-            }
+            double maxflow=0;
             foreach (Component e in Components)
             {
                 e.Draw(graphic);
+                if(e is Sink)
+                {
+                    maxflow = ((Sink)e).Flow;
+                }
             }
+            foreach (Pipe p in Pipes)
+            {
+                p.Draw(graphic,maxflow);
+            }
+         
         }
         public void DeleteElementOrPipeline(Point p) //Delete component or pipe that was chosen
         {
@@ -722,38 +733,9 @@ namespace FlowNetworkDesigner
                 Pipes.Remove(pl);
             }
         }
-        public void EditElement(Point p, int cap, int newUpper, int newLower) //Changing capacity of Pump or Sink and also changing precantage of the AdjSplitter 
-        {
-            Component comp = CheckComponent(p);
-            Pipe pl = CheckPipeline(p);
-
-            if (comp != null)
-            {
-                if (comp is Pump)
-                {
-                    var obj = (Pump)comp;
-                    obj.Flow = cap;
-                }
-                if (comp is Sink)
-                {
-                    var obj = (Sink)comp;
-                    obj.Flow = cap;
-                }
-                if (comp is AdjSplitter)
-                {
-                    var obj = (AdjSplitter)comp;
-                    obj.upValue = newUpper;
-                    obj.downValue = newLower;
-              
-                }
-            }
-        }
-        public void newFile() 
-        {
-            Components.Clear(); //Clear list with all elements
-            Pipes.Clear(); //Clear list with all pipelines
-        }
-        public void saveFile() 
+       
+       
+        public void Save() 
         {
             FileStream fs = null;
             StreamWriter sw = null;
@@ -773,8 +755,8 @@ namespace FlowNetworkDesigner
                     if (x.Name == "Pump")
                     {
                         sw.WriteLine(x.Name);
-                        sw.WriteLine(((Component)x).Location.X);
-                        sw.WriteLine(((Component)x).Location.Y);
+                        sw.WriteLine(((Component)x).Position.X);
+                        sw.WriteLine(((Component)x).Position.Y);
 
                         Pump temp = (Pump)x;
                         sw.WriteLine(temp.Flow);
@@ -782,8 +764,8 @@ namespace FlowNetworkDesigner
                     if (x.Name == "Sink")
                     {
                         sw.WriteLine(x.Name);
-                        sw.WriteLine(((Component)x).Location.X);
-                        sw.WriteLine(((Component)x).Location.Y);
+                        sw.WriteLine(((Component)x).Position.X);
+                        sw.WriteLine(((Component)x).Position.Y);
 
                         Sink temp = (Sink)x;
                         sw.WriteLine(temp.Flow);
@@ -791,24 +773,23 @@ namespace FlowNetworkDesigner
                     if (x.Name == "Merger")
                     {
                         sw.WriteLine(x.Name);
-                        sw.WriteLine(((Component)x).Location.X);
-                        sw.WriteLine(((Component)x).Location.Y);
+                        sw.WriteLine(((Component)x).Position.X);
+                        sw.WriteLine(((Component)x).Position.Y);
                     }
                     if (x.Name == "Splitter")
                     {
                         sw.WriteLine(x.Name);
-                        sw.WriteLine(((Component)x).Location.X);
-                        sw.WriteLine(((Component)x).Location.Y);
+                        sw.WriteLine(((Component)x).Position.X);
+                        sw.WriteLine(((Component)x).Position.Y);
                     }
                     if (x.Name == "Adjustable Splitter")
                     {
                         sw.WriteLine(x.Name);
-                        sw.WriteLine(((Component)x).Location.X);
-                        sw.WriteLine(((Component)x).Location.Y);
+                        sw.WriteLine(((Component)x).Position.X);
+                        sw.WriteLine(((Component)x).Position.Y);
 
                         AdjSplitter temp = (AdjSplitter)x;
                         sw.WriteLine(temp.upValue);
-                        sw.WriteLine(temp.downValue);
                     }
                 }
                 foreach (Pipe p in Pipes)
@@ -834,7 +815,7 @@ namespace FlowNetworkDesigner
                 if (fs != null) fs.Close();
             }
         }
-        public void loadFile() //Load project from a file that was selected
+        public void Load() 
         {
             Components.Clear();
             Pipes.Clear();
@@ -856,7 +837,7 @@ namespace FlowNetworkDesigner
                 int capacity = 0;
                 int flow = 0;
                 int percup = 0;
-                int percdown = 0;
+                
 
                 while (name != "*")
                 {
@@ -864,37 +845,40 @@ namespace FlowNetworkDesigner
                     {
                         location = new Point(Convert.ToInt32(sr.ReadLine()), Convert.ToInt32(sr.ReadLine()));
                         capacity = Convert.ToInt32(sr.ReadLine());
-                        AddPump(location, name, capacity);
+                        AddComponent(null, 0, location, null, capacity, 0);
+
                     }
                     if (name == "Sink")
                     {
                         location = new Point(Convert.ToInt32(sr.ReadLine()), Convert.ToInt32(sr.ReadLine()));
                         capacity = Convert.ToInt32(sr.ReadLine());
-                        AddSink(location, name, capacity);
+                        AddComponent(null, 0, location, null, 0, capacity);
                     }
                     if (name == "Merger")
                     {
                         location = new Point(Convert.ToInt32(sr.ReadLine()), Convert.ToInt32(sr.ReadLine()));
-                        AddMerger(location, name);
+                        AddComponent(null, 0, location, null, capacity, 0);
+
                     }
                     if (name == "Splitter")
                     {
                         location = new Point(Convert.ToInt32(sr.ReadLine()), Convert.ToInt32(sr.ReadLine()));
-                        AddSplitter(location, name);
+                        AddComponent(null, 0, location, null, capacity, 0);
+
                     }
                     if (name == "Adjustable Splitter")
                     {
                         location = new Point(Convert.ToInt32(sr.ReadLine()), Convert.ToInt32(sr.ReadLine()));
                         percup = Convert.ToInt32(sr.ReadLine());
-                        percdown = Convert.ToInt32(sr.ReadLine());
-                        AddAdjSplitter(location, name, percup, percdown);
+                        AddComponent(null, percup, location, null, capacity, 0);
+
                     }
                     if (name == "Pipeline")
                     {
                         location1 = new Point(Convert.ToInt32(sr.ReadLine()), Convert.ToInt32(sr.ReadLine()));
                         location2 = new Point(Convert.ToInt32(sr.ReadLine()), Convert.ToInt32(sr.ReadLine()));
                         flow = Convert.ToInt32(sr.ReadLine());
-                        Pipes.Add(new Pipe(location1, location2, name, flow));
+                        Pipes.Add(new Pipe(location1, location2, name));
                     }
                     name = sr.ReadLine();
                 }
@@ -911,484 +895,7 @@ namespace FlowNetworkDesigner
                 if (fs != null) fs.Close();
             }
         }
-
-        //public List<Component> Components { get; set; }
-
-        //public List<Pipe> Pipes { get; set; }
-
-        //private Component[] TempComponents;
-
-        //public Network()
-        //{
-        //    Components = new List<Component>();
-        //    Pipes = new List<Pipe>();
-        //}
-
-
-        //public void AddComponent(Component component, Form1 form)
-        //{
-        //    if (CheckAddingComponents(component))
-        //    {
-
-        //        component.Draw(component.Position, form);
-
-
-        //        Components.Add(component);
-        //    }
-        //}
-
-        //public void AddPipe(Pipe pipe, PaintEventArgs e, Form form)
-        //{
-        //    ConnectPipe(pipe, e, form);
-        //    Pipes.Add(pipe);
-
-        //}
-
-        //private void ConnectPipe(Pipe pipe, PaintEventArgs e, Form form)
-        //{
-        //    TempComponents = new Component[2];
-        //    foreach (Component c in Components)
-        //    {
-        //        if(pipe.Points[0] == c.Position)
-        //        {
-        //            if(!(c is Sink))
-        //            {
-        //                c.AddOuterPipe(pipe,form);
-        //                pipe = c.UpdatePipe(pipe,form);
-
-        //                TempComponents[0] = c;
-        //            }
-
-        //            //if(c is Pump)
-        //            //{
-
-        //            //    ((Pump)c).AddPipe(pipe);
-        //            //    pipe = c.UpdatePipe(pipe);
-        //            //}
-        //            //else if(c is Merger)
-        //            //{
-
-        //            //}
-        //            //else if(c is Splitter)
-        //            //{
-
-        //            //}
-        //            //else if(c is AdjSplitter)
-        //            //{
-
-        //            //}
-        //        }
-        //        if (pipe.Points.Count > 0)
-        //        {
-        //            if (pipe.Points[pipe.Points.Count - 1] == c.Position)
-        //            {
-        //                if (c is Splitter)
-        //                {
-        //                    TempComponents[1] = c;
-        //                }
-        //                else if (!(c is Pump))
-        //                {
-        //                    c.AddInnerPipe(pipe,form);
-        //                    TempComponents[1] = c;
-        //                }
-
-        //                //if (c is Sink)
-        //                //{
-        //                //    ((Sink)c).AddPipe(pipe);
-        //                //}
-        //                //else if (c is Merger)
-        //                //{
-
-        //                //}
-        //                //else if (c is Splitter)
-        //                //{
-
-        //                //}
-        //                //else if (c is AdjSplitter)
-        //                //{
-
-        //                //}
-        //            }
-        //        }
-        //    }
-
-        //    this.DrawOnForm(pipe, e, form);
-        //    foreach (object c in form.Controls)
-        //    {
-        //        if(c is Label)
-        //        ((Label)c).Text="Flow "+GetComponent(((Label)c).Name).Flow;
-        //    }
-        //}
-
-
-        //public void DrawOnForm(Pipe pipe, PaintEventArgs e, Form form)
-        //{
-        //    // use the graphics class here to draw the pipes
-        //    Graphics g = e.Graphics;
-        //    Pen p = new Pen(Brushes.Green, 3);
-        //    for (int i = 0; i < pipe.Points.Count; i++)
-        //    {
-        //        //this part is if the user clicked on the components only
-        //        if (pipe.Points.Count == 2)
-        //        {
-        //            if (TempComponents[0] is Splitter || TempComponents[0] is AdjSplitter)
-        //            {
-        //                if (((Splitter)TempComponents[0]).IsUpperOutPipeNull())
-        //                {
-        //                    //this is to align the first pipeline at the top of the picture box
-        //                    int lr, td;
-        //                    lr = pipe.Points[0].X + 45;
-        //                    td = pipe.Points[0].Y + 5;
-        //                    Point pos = new Point(lr, td);
-        //                    // end of alignment
-
-        //                    if (TempComponents[1] is Merger)
-        //                    {
-        //                        if (((Merger)TempComponents[1]).IsLowerInPipeNull())
-        //                        {
-        //                            //this is for the positioning of the pipeline to the middle of the last component
-        //                            td = pipe.Points[pipe.Points.Count - 1].Y + 5;
-        //                            Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                            //end of alignment
-        //                            g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
-
-        //                            Label label = new Label();
-        //                            label.Name = TempComponents[0].pb.Name;
-        //                            label.Text = "Flow " + pipe.Flow;
-        //                            label.BackColor = Color.Transparent;
-        //                            int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                            int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                            label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                            form.Controls.Add(label);
-        //                            break;
-        //                        }
-        //                        else
-        //                        {
-        //                            //this is for the positioning of the pipeline to the middle of the last component
-        //                            td = pipe.Points[pipe.Points.Count - 1].Y + (TempComponents[1].pb.Size.Height - 5);
-        //                            Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                            //end of alignment
-        //                            g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
-
-        //                            Label label = new Label();
-        //                            label.Text = "Flow " + pipe.Flow;
-        //                            label.Name = TempComponents[0].pb.Name;
-        //                            label.BackColor = Color.Transparent;
-        //                            int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                            int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                            label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                            form.Controls.Add(label);
-        //                            break;
-        //                        }
-        //                    }
-        //                    else if (!(TempComponents[1] is Pump))
-        //                    {
-        //                        //this is for the positioning of the pipeline to the middle of the last component
-        //                        td = pipe.Points[pipe.Points.Count - 1].Y + (50 / 2);
-        //                        Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                        //end of alignment
-        //                        g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
-
-        //                        Label label = new Label();
-        //                        label.Text = "Flow " + pipe.Flow;
-        //                        label.Name = TempComponents[0].pb.Name;
-        //                        label.BackColor = Color.Transparent;
-        //                        int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                        int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                        label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                        form.Controls.Add(label);
-        //                        break;
-        //                    }
-        //                }
-        //                else if(!(TempComponents[0] is Sink))
-        //                {
-        //                    //this is to align the second pipeline to the buttom of the picture box
-        //                    int lr, td;
-        //                    lr = pipe.Points[0].X + 45;
-        //                    td = pipe.Points[0].Y + (TempComponents[0].pb.Size.Height - 5);
-        //                    Point pos = new Point(lr, td);
-        //                    // end of alignment
-
-        //                    if (TempComponents[1] is Merger)
-        //                    {
-        //                        if (((Merger)TempComponents[1]).IsLowerInPipeNull())
-        //                        {
-        //                            //this is for the positioning of the pipeline to the middle of the last component
-        //                            td = pipe.Points[pipe.Points.Count - 1].Y + 5;
-        //                            Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                            //end of alignment
-        //                            g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
-
-        //                            Label label = new Label();
-        //                            label.Text = "Flow " + pipe.Flow;
-        //                            label.Name = TempComponents[0].pb.Name;
-        //                            label.BackColor = Color.Transparent;
-        //                            int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                            int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                            label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                            form.Controls.Add(label);
-        //                            break;
-        //                        }
-        //                        else
-        //                        {
-        //                            //this is for the positioning of the pipeline to the middle of the last component
-        //                            td = pipe.Points[pipe.Points.Count - 1].Y + (TempComponents[1].pb.Size.Height - 5);
-        //                            Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                            //end of alignment
-        //                            g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
-
-        //                            Label label = new Label();
-        //                            label.Text = "Flow " + pipe.Flow;
-        //                            label.Name = TempComponents[0].pb.Name;
-        //                            label.BackColor = Color.Transparent;
-        //                            int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                            int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                            label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                            form.Controls.Add(label);
-        //                            break;
-        //                        }
-        //                    }
-        //                    else if (!(TempComponents[1] is Pump))
-        //                    {
-        //                        //this is for the positioning of the pipeline to the middle of the last component
-        //                        td = pipe.Points[pipe.Points.Count - 1].Y + (50 / 2);
-        //                        Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                        //end of alignment
-        //                        g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
-
-        //                        Label label = new Label();
-        //                        label.Text = "Flow " + pipe.Flow;
-        //                        label.Name = TempComponents[0].pb.Name;
-        //                        label.BackColor = Color.Transparent;
-        //                        int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                        int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                        label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                        form.Controls.Add(label);
-        //                        break;
-        //                    }
-        //                }
-        //            }
-        //            else if (!(TempComponents[0] is Sink))
-        //            {
-        //                //this is to align the line in the middle of the picture box
-        //                int lr, td;
-        //                lr = pipe.Points[0].X + 45;
-        //                td = pipe.Points[0].Y + (50 / 2);
-        //                Point pos = new Point(lr, td);
-        //                // end of alignment
-
-
-        //                //Akinan pone if statement pa e lastu component den e list di tempcomponent (dus pa check e merger)
-        //                if (TempComponents[1] is Merger)
-        //                {
-        //                    if (((Merger)TempComponents[1]).IsLowerInPipeNull())
-        //                    {
-        //                        //this is for the positioning of the pipeline to the middle of the last component
-        //                        td = pipe.Points[pipe.Points.Count - 1].Y + 5;
-        //                        Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                        //end of alignment
-        //                        g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
-
-        //                        Label label = new Label();
-        //                        label.Text = "Flow " + pipe.Flow;
-        //                        label.Name = TempComponents[0].pb.Name;
-        //                        label.BackColor = Color.Transparent;
-        //                        int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                        int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                        label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                        form.Controls.Add(label);
-        //                        break;
-        //                    }
-        //                    else
-        //                    {
-        //                        //this is for the positioning of the pipeline to the middle of the last component
-        //                        td = pipe.Points[pipe.Points.Count - 1].Y + (TempComponents[1].pb.Size.Height - 5);
-        //                        Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                        //end of alignment
-        //                        g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
-
-        //                        Label label = new Label();
-        //                        label.Text = "Flow " + pipe.Flow;
-        //                        label.Name = TempComponents[0].pb.Name;
-        //                        label.BackColor = Color.Transparent;
-        //                        int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                        int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                        label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                        form.Controls.Add(label);
-        //                        break;
-        //                    }
-        //                }
-        //                else if (!(TempComponents[1] is Pump))
-        //                {
-        //                    //this is for the positioning of the pipeline to the middle of the last component
-        //                    td = pipe.Points[pipe.Points.Count - 1].Y + (50 / 2);
-        //                    Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                    //end of alignment
-        //                    g.DrawLine(p, form.PointToClient(pos), form.PointToClient(posf));
-
-        //                    Label label = new Label();
-        //                    label.Text = "Flow " + pipe.Flow;
-        //                    label.Name = TempComponents[0].pb.Name;
-        //                    label.BackColor = Color.Transparent;
-        //                    int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                    int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                    label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                    form.Controls.Add(label);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //        //end of Checking for only clicking on the components in the form
-
-        //        //this part is if the user clicked on multiple areas in the form
-        //        if (i == 0)
-        //        {
-        //            if (TempComponents[0] is Splitter || TempComponents[0] is AdjSplitter)
-        //            {
-        //                if (((Splitter)TempComponents[0]).IsUpperOutPipeNull())
-        //                {
-        //                    //this is to align the first pipeline at the top of the picture box
-        //                    int lr, td;
-        //                    lr = pipe.Points[0].X + 45;
-        //                    td = pipe.Points[0].Y + 5;
-        //                    Point pos = new Point(lr, td);
-        //                    // end of alignment
-        //                    g.DrawLine(p, form.PointToClient(pos), form.PointToClient(pipe.Points[i + 1]));
-        //                }
-        //                else
-        //                {
-        //                    //this is to align the second pipeline to the buttom of the picture box
-        //                    int lr, td;
-        //                    lr = pipe.Points[0].X + 45;
-        //                    td = pipe.Points[0].Y + (TempComponents[0].pb.Size.Height - 5);
-        //                    Point pos = new Point(lr, td);
-        //                    // end of alignment
-        //                    g.DrawLine(p, form.PointToClient(pos), form.PointToClient(pipe.Points[i + 1]));
-        //                }
-        //            }
-        //            else if (!(TempComponents[0] is Sink))
-        //            {
-        //                //this is to align the line in the middle of the picture box
-        //                int lr, td;
-        //                lr = pipe.Points[0].X + 45;
-        //                td = pipe.Points[0].Y + (50 / 2);
-        //                Point pos = new Point(lr, td);
-        //                // end of alignment
-        //                g.DrawLine(p, form.PointToClient(pos), form.PointToClient(pipe.Points[i + 1]));
-        //            }
-
-        //        }
-        //        else if (i < pipe.Points.Count - 2)
-        //        {
-        //            g.DrawLine(p, form.PointToClient(pipe.Points[i]), form.PointToClient(pipe.Points[i + 1]));
-        //        }
-        //        else
-        //        {
-        //            if (TempComponents[1] is Merger)
-        //            {
-        //                if (((Merger)TempComponents[1]).IsLowerInPipeNull())
-        //                {
-        //                    //this is for the positioning of the pipeline to the middle of the last component
-        //                    int td = pipe.Points[pipe.Points.Count - 1].Y + 5;
-        //                    Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                    //end of alignment
-        //                    g.DrawLine(p, form.PointToClient(pipe.Points[i]), form.PointToClient(posf));
-
-        //                    Label label = new Label();
-        //                    label.Text = "Flow " + pipe.Flow;
-        //                    label.Name = TempComponents[0].pb.Name;
-        //                    label.BackColor = Color.Transparent;
-        //                    int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                    int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                    label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                    form.Controls.Add(label);
-        //                    break;
-        //                }
-        //                else
-        //                {
-        //                    //this is for the positioning of the pipeline to the middle of the last component
-        //                    int td = pipe.Points[pipe.Points.Count - 1].Y + (TempComponents[1].pb.Size.Height - 5);
-        //                    Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                    //end of alignment
-        //                    g.DrawLine(p, form.PointToClient(pipe.Points[i]), form.PointToClient(posf));
-
-        //                    Label label = new Label();
-        //                    label.Text = "Flow " + pipe.Flow;
-        //                    label.Name = TempComponents[0].pb.Name;
-        //                    label.BackColor = Color.Transparent;
-        //                    int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                    int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                    label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                    form.Controls.Add(label);
-        //                    break;
-        //                }
-        //            }
-        //            else if (!(TempComponents[1] is Pump))
-        //            {
-        //                //this is for the positioning of the pipeline to the middle of the last component
-        //                int td = pipe.Points[pipe.Points.Count - 1].Y + (50 / 2);
-        //                Point posf = new Point(pipe.Points[pipe.Points.Count - 1].X, td);
-        //                //end of alignment
-        //                g.DrawLine(p, form.PointToClient(pipe.Points[i]), form.PointToClient(posf));
-
-        //                Label label = new Label();
-        //                label.Text = "Flow " + pipe.Flow;
-        //                label.Name = TempComponents[0].pb.Name;
-        //                label.BackColor = Color.Transparent;
-        //                int x = (pipe.Points[1].X - pipe.Points[0].X) / 2;
-        //                int y = (pipe.Points[1].Y - pipe.Points[0].Y) / 2;
-
-        //                label.Location = form.PointToClient(new Point(pipe.Points[0].X + x, pipe.Points[0].Y + y));
-        //                form.Controls.Add(label);
-        //                break;
-        //            }
-
-        //        }
-        //        //end if the user clicked on multiple areas in the form
-        //    }
-        //}
-
-
-        ////Checks if the point you clicked is valid and not next to a component
-        //private bool CheckAddingComponents(Component comp)
-        //{
-        //    if (Components.Count > 0)
-        //    {
-        //        foreach (Component c in Components)
-        //        {
-        //            if(comp.Position.X >=(c.Position.X-63)&& comp.Position.Y >= (c.Position.Y - 63)&& comp.Position.X <= (c.Position.X + 63) && comp.Position.Y <= (c.Position.Y + 63))
-        //            {
-        //                return false;
-        //            }
-        //        }
-        //    }
-
-        //    return true;
-
-        //}
-
-        //public Component GetComponent(string type)
-        //{
-        //    foreach(Component c in Components)
-        //    {
-        //        if (c.pb.Name == type)
-        //        {
-        //            return c;
-        //        }
-        //    }
-        //    return null;
-        //}
+        
 
 
     }

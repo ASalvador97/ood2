@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FlowNetworkDesigner.AdjSplitter">
+    <Position X="16" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AdjSplitter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FlowNetworkDesigner.Component">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAgAAAAgIQAAAAAABAAAAAAAAAQAAA=</HashCode>
+      <FileName>Component.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FlowNetworkDesigner.Form1">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEICBAABAAAACAAAACAM47hAACxXIvAQwAQAA=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Network" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FlowNetworkDesigner.Network">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAgIQAoAAJAoBAgFAAIIAAAAIAAAAAIQlAAAgABGg=</HashCode>
+      <FileName>Network.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Pipe" />
+      <Property Name="Component" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FlowNetworkDesigner.Merger">
+    <Position X="9" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAABAAEIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Merger.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Pipe" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FlowNetworkDesigner.Pipe">
+    <Position X="16" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAgAQAAAAAAAAAAQABAAAQAAA=</HashCode>
+      <FileName>Pipe.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FlowNetworkDesigner.Pump">
+    <Position X="6.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAIAAAAAAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Pump.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="OutPipe" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FlowNetworkDesigner.Sink">
+    <Position X="11.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAIAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Sink.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="InPipe" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FlowNetworkDesigner.Splitter">
+    <Position X="13.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAgAAABAAAIAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Splitter.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Pipe" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
